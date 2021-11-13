@@ -1,0 +1,51 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.kotlin_version = '1.5.20'
+    repositories {
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/public"
+        }
+        maven { url 'https://jitpack.io' }
+        google()
+        maven {
+            url uri(rootDir.path + '/builder/build/repo')
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath "site.zbyte.root:zroot-builder:2.11"
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "https://maven.aliyun.com/repository/google"
+        }
+        maven {
+            url "https://maven.aliyun.com/repository/public"
+        }
+        maven { url 'https://jitpack.io' }
+        google()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+task copySDK(type: Copy) {
+    dependsOn(':sdk:bundleReleaseAar')
+    from(rootDir.path + '/sdk/build/outputs/aar/root-driver-release.aar')
+    into(rootDir.path + '/build')
+    rename('root-driver-release.aar', 'root-driver.aar')
+}
+
+task export() {
+    dependsOn('copySDK')
+}

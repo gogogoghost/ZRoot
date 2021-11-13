@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">root app</string>
+    <string name="desc">测试描述</string>
+</resources>

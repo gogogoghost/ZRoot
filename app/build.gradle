@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'zroot-builder'
+    id 'kotlin-parcelize'
+}
+
+rootDriver{
+    filter([
+            "site/zbyte/root/app/remote/.*",
+            "site/zbyte/root/app/IWorker.*"
+    ])
+    mainClass("site.zbyte.root.app.remote.Worker")
+    debug(":runner")
+}
+
+android {
+    compileSdkVersion 31
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "site.zbyte.root.app"
+        minSdkVersion 23
+        targetSdkVersion 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    sourceSets {
+        main {
+            assets.srcDirs = [buildDir.path+'/assets']
+        }
+    }
+}
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+
+    implementation project(path: ':sdk')
+
+    compileOnly project(path: ':hidden_api')
+
+    def shizuku_version = '11.0.2'
+    implementation "dev.rikka.shizuku:api:$shizuku_version"
+    implementation "dev.rikka.shizuku:provider:$shizuku_version"
+
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:2.0'
+}

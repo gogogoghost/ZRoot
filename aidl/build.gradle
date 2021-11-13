@@ -1,0 +1,38 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 31
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+}
+
+task copyAIDL2sdk(type:Copy,dependsOn:':aidl:compileReleaseAidl'){
+    from(buildDir.path+'/generated/aidl_source_output_dir/release/out/')
+    into(rootDir.path+'/sdk/src/main/java/')
+}
+
+task copyAIDL2runner(type:Copy,dependsOn:':aidl:compileReleaseAidl'){
+    from(buildDir.path+'/generated/aidl_source_output_dir/release/out/')
+    into(rootDir.path+'/runner/src/main/java/')
+}
+
+task copyAIDL(dependsOn:['copyAIDL2sdk','copyAIDL2runner']){}

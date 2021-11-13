@@ -1,0 +1,111 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+}
+
+
+android {
+    compileSdkVersion 31
+
+    buildToolsVersion '30.0.3'
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 31
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    android.libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "root-driver" + "-${buildType.name}"+'.aar'
+        }
+    }
+    sourceSets {
+        main {
+            assets.srcDirs = [buildDir.path+'/assets']
+        }
+    }
+    ndkVersion '22.0.7026061'
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compileOnly project(path: ':hidden_api')
+}
+
+//boolean isReleaseBuildType(){
+//    for(String s : gradle.startParameter.taskNames) {
+//        if (s.contains("Release") | s.contains("release")) {
+//            return true
+//        }
+//    }
+//    return false
+//}
+
+//task copyStarterDebug(type:Copy,dependsOn: ['cleanStarter','copyDebugJniLibsProjectOnly']){
+//    from(buildDir.path+"/intermediates/cmake/debug/obj/armeabi-v7a/starter")
+//    into(buildDir.path+'/assets/')
+//}
+//
+//task copyStarterRelease(type:Copy,dependsOn: ['cleanStarter','copyReleaseJniLibsProjectOnly']){
+//    from(buildDir.path+"/intermediates/cmake/release/obj/armeabi-v7a/starter")
+//    into(buildDir.path+'/assets/')
+//}
+//
+//task cleanStarter(type:Delete){
+//    delete projectDir.path+'/src/main/assets/starter'
+//}
+
+def isWindows=false
+if (System.properties['os.name'].toLowerCase().contains('windows')) {
+    isWindows=true
+}
+
+def localProperties = new File(project.rootDir, "local.properties")
+def properties = new Properties()
+localProperties.withInputStream { instr ->
+    properties.load(instr)
+}
+def sdkDir=properties.getProperty('sdk.dir')
+
+task copyRunner(type:Exec,dependsOn: ':runner:makeJar'){
+    def buildToolVersion=project.extensions.findByName('android').getProperties()['buildToolsVersion']
+    def dexFile=sdkDir+'/build-tools/'+buildToolVersion+'/dx'+(isWindows?'.bat':'')
+
+    def srcFile=rootDir.path+'/runner/build/libs/runner.jar'
+    def outFile=project.buildDir.path+'/assets/runner.dex'
+
+    def assetsDir=new File(outFile).parentFile
+    if(!assetsDir.exists()){
+        assetsDir.mkdirs()
+    }
+
+    executable(dexFile)
+    args(["--dex","--output",outFile,srcFile])
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'generateDebugAssets' || task.name == 'generateReleaseAssets') {
+        task.dependsOn(['copyRunner'])
+    }
+}
