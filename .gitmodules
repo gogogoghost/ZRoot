@@ -1,2 +1,5 @@
-[submodule "https://github.com/gogogoghost/ZRoot-builder"]
-	url = builder
+[submodule "builder"]
+	path = builder
+	url = git@github.com:gogogoghost/ZRoot-builder.git
+	branch = master
+
