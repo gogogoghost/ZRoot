@@ -5,7 +5,7 @@ plugins {
     id 'kotlin-parcelize'
 }
 
-rootDriver{
+zRoot{
     filter([
             "site/zbyte/root/app/remote/.*",
             "site/zbyte/root/app/IWorker.*"
