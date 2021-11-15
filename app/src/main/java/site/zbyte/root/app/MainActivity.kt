@@ -6,33 +6,39 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import site.zbyte.root.sdk.ZRoot
 import android.os.*
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
 
+    companion object{
+        private const val TAG = "MainActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val zRoot=ZRoot(this)
+        val zRoot = ZRoot(this)
         zRoot.start(5000) {
             //start fail
-            if(!it)
+            if (!it)
                 return@start
 
             /**
              * get custom remote worker
              */
-            val worker=IWorker.Stub.asInterface(zRoot.getWorker())
+            val worker = IWorker.Stub.asInterface(zRoot.getWorker())
+
             /**
              * invoke remote method
              */
-            println(worker.work())
+            val msg = worker.work()
+            Log.i(TAG, "from remote: $msg")
 
             /**
              * get remote service
              */
-            val remoteService=zRoot.getRemoteService("activity")
+            val remoteService = zRoot.getRemoteService("activity")
 
             /**
              * convert to IActivityManager
@@ -41,10 +47,11 @@ class MainActivity : AppCompatActivity() {
                 IActivityManager.Stub.asInterface(remoteService)
             else
                 ActivityManagerNative.asInterface(remoteService)
+
             /**
              * send broadcast via root
              */
-            val intent= Intent("android.abc.abc.abc")
+            val intent = Intent("android.abc.abc.abc")
             mAm.broadcastIntent(
                 null,
                 intent,
@@ -65,7 +72,7 @@ class MainActivity : AppCompatActivity() {
              * get ContentProvider from activity service via root
              */
             val authority = "settings"
-            val holder = mAm.getContentProviderExternal(authority, 0, null,null)
+            val holder = mAm.getContentProviderExternal(authority, 0, null, null)
 
             /**
              * it equivalent to:
