@@ -80,7 +80,10 @@ class MainActivity : AppCompatActivity() {
              * get ContentProvider from activity service via root
              */
             val authority = "settings"
-            val holder = mAm.getContentProviderExternal(authority, 0, null, null)
+            val provider = if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q)
+                mAm.getContentProviderExternal(authority, 0, null, null).provider
+            else
+                mAm.getContentProviderExternal(authority, 0, null).provider
 
             /**
              * it equivalent to:
@@ -90,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             val bundle = Bundle()
             bundle.putString("value", "1")
             zRoot.callContentProvider(
-                holder.provider.asBinder(),
+                provider.asBinder(),
                 "android",
                 authority,
                 "PUT_secure",
