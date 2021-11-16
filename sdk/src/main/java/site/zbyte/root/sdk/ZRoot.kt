@@ -25,8 +25,6 @@ class ZRoot(private val context: Context) {
 
     private var randomString = ""
 
-    private val serviceMap = hashMapOf<String, IRemoteService>()
-
     private var deadCallback: (() -> Unit)? = null
 
     init {
@@ -235,49 +233,10 @@ class ZRoot(private val context: Context) {
     }
 
     /**
-     * 获取远程binder
-     */
-    fun getExecutor(): IRemote? {
-        return rawRemote
-    }
-
-    /**
      * 获取用户自定义远程worker
      */
     fun getWorker(): IBinder? {
         return worker
-    }
-
-    /**
-     * 获取一个使用起来比较麻烦的服务
-     */
-    fun getService(name: String, interfaceToken: String): IRemoteService? {
-        if (serviceMap.containsKey(name))
-            return serviceMap[name]
-        //初始化服务
-        val binder = ServiceManager.getService(name) ?: return null
-        val service = object : IRemoteService {
-            override fun transact(transactCode: Int, data: Parcel, result: Parcel) {
-                caller!!.transact(transactCode, data, result, 0)
-            }
-
-            override fun createApi(interfaceName: String, codeName: String): RemoteApi {
-                val code = rawRemote!!.getTransactCode(interfaceName, codeName)
-                if (code == -1)
-                    throw Exception("Cannot find this code")
-                return RemoteApi(this, binder, interfaceToken, code)
-            }
-
-            override fun createApi(methodName: String): RemoteApi {
-                return createApi("$interfaceToken\$Stub", "TRANSACTION_$methodName")
-            }
-
-            override fun getInterfaceToken(): String {
-                return interfaceToken
-            }
-        }
-        serviceMap[name] = service
-        return service
     }
 
     /**
@@ -296,6 +255,13 @@ class ZRoot(private val context: Context) {
                 return caller!!.transact(code, data, reply, flags)
             }
         })
+    }
+
+    /**
+     * 调用远程去call ContentProvider
+     */
+    fun callContentProvider(contentProvider:IBinder,packageName:String,authority:String,methodName:String,key:String,data:Bundle):Bundle?{
+        return rawRemote!!.callContentProvider(contentProvider, packageName, authority, methodName, key, data)
     }
 
     companion object {

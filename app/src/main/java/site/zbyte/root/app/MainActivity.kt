@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
              */
             val bundle = Bundle()
             bundle.putString("value", "1")
-            zRoot.getExecutor()!!.callContentProvider(
+            zRoot.callContentProvider(
                 holder.provider.asBinder(),
                 "android",
                 authority,
