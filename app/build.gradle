@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'zroot-builder'
-    id 'kotlin-parcelize'
 }
 
 zRoot{
