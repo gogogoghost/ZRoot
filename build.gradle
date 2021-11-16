@@ -2,36 +2,21 @@
 buildscript {
     ext.kotlin_version = '1.5.20'
     repositories {
-        maven {
-            url "https://maven.aliyun.com/repository/google"
-        }
-        maven {
-            url "https://maven.aliyun.com/repository/public"
-        }
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
         google()
-//        maven {
-//            url uri(rootDir.path + '/builder/build/repo')
-//        }
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-//        classpath "site.zbyte.root:zroot-builder:2.11"
     }
 }
 
 allprojects {
     repositories {
-        maven {
-            url "https://maven.aliyun.com/repository/google"
-        }
-        maven {
-            url "https://maven.aliyun.com/repository/public"
-        }
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
         google()
+        maven { url 'https://jitpack.io' }
     }
 }
 
