@@ -1,6 +1,5 @@
 include ':sdk'
 include ':hidden_api'
 include ':runner'
-include ':app'
 rootProject.name = "ZRoot"
 
