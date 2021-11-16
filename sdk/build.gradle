@@ -94,13 +94,13 @@ task copyRunner(type: Exec, dependsOn: ':runner:makeJar') {
     def dexFile = sdkDir + '/build-tools/' + buildToolVersion + '/dx' + (isWindows ? '.bat' : '')
 
     def srcFile = rootDir.path + '/runner/build/libs/runner.jar'
-    def outFile = project.buildDir.path + '/assets/runner.dex'
-
-    def assetsDir = new File(outFile).parentFile
-    if (!assetsDir.exists()) {
-        assetsDir.mkdirs()
+    def outFile = buildDir.path + '/assets/runner.dex'
+    doFirst {
+        def assetsDir = new File(outFile).parentFile
+        if (!assetsDir.exists()) {
+            assetsDir.mkdirs()
+        }
     }
-
     executable(dexFile)
     args(["--dex", "--output", outFile, srcFile])
 }
