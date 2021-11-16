@@ -1,5 +1,5 @@
-// IExecutor.aidl
-package site.zbyte.root.aidl;
+// IRemote.aidl
+package site.zbyte.root.sdk;
 
 // Declare any non-default types here with import statements
 

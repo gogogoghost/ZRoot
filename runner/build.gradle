@@ -30,14 +30,13 @@ dependencies {
 }
 
 
-
-task removeLibs(type: Delete){
-    delete buildDir.path+'/libs'
+task removeLibs(type: Delete) {
+    delete buildDir.path + '/libs'
 }
 
-task makeJar(type:Jar,dependsOn:['removeLibs','syncReleaseLibJars']){
+task makeJar(type: Jar, dependsOn: ['removeLibs', 'syncReleaseLibJars']) {
     from(
-        zipTree('build/intermediates/aar_main_jar/release/classes.jar')
+            zipTree('build/intermediates/aar_main_jar/release/classes.jar')
     )
     exclude(['**/*/BuildConfig.class'])
 }

@@ -2,9 +2,6 @@ package site.zbyte.root.sdk
 
 import android.content.*
 import android.os.*
-import android.util.Log
-import dalvik.system.PathClassLoader
-import site.zbyte.root.aidl.IRemote
 import java.io.*
 import java.util.zip.ZipFile
 import kotlin.random.Random
@@ -20,7 +17,7 @@ class ZRoot(private val context: Context) {
 
     private val lock = Object()
 
-    private var rawRemote:IRemote?=null
+    private var rawRemote: IRemote? = null
     private var worker: IBinder? = null
     private var caller: IBinder? = null
 
@@ -144,10 +141,7 @@ class ZRoot(private val context: Context) {
      * 异步start
      */
     @Synchronized
-    fun start(
-        timeout: Long,
-        callback: (Boolean) -> Unit
-    ) {
+    fun start(timeout: Long, callback: (Boolean) -> Unit) {
         if (asyncStarting) {
             throw Exception("Already under starting")
         }
@@ -214,7 +208,7 @@ class ZRoot(private val context: Context) {
     fun onReceive(binder: IBinder) {
         val raw = IRemote.Stub.asInterface(binder)
         raw.asBinder().linkToDeath({
-            rawRemote=null
+            rawRemote = null
             worker = null
             caller = null
             handler.post {
@@ -222,7 +216,7 @@ class ZRoot(private val context: Context) {
             }
         }, 0)
         raw.registerWatcher(Binder())
-        rawRemote=raw
+        rawRemote = raw
         worker = raw.worker
         caller = raw.caller
         synchronized(lock) {
@@ -243,7 +237,7 @@ class ZRoot(private val context: Context) {
     /**
      * 获取远程binder
      */
-    fun getExecutor():IRemote?{
+    fun getExecutor(): IRemote? {
         return rawRemote
     }
 
@@ -289,45 +283,47 @@ class ZRoot(private val context: Context) {
     /**
      * 获取一个使用起来比较简单的服务
      */
-    fun getRemoteService(name:String):IBinder{
-        val service=ServiceManager.getService(name)
-        return getServiceWrapper(object :ITransactor{
+    fun getRemoteService(name: String): IBinder {
+        val service = ServiceManager.getService(name)
+        return getServiceWrapper(object : ITransactor {
             override fun obtain(): Parcel {
-                val parcel=Parcel.obtain()
+                val parcel = Parcel.obtain()
                 parcel.writeStrongBinder(service)
                 return parcel
             }
+
             override fun transact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-                return caller!!.transact(code,data,reply,flags)
+                return caller!!.transact(code, data, reply, flags)
             }
         })
     }
 
-    companion object{
+    companion object {
         /**
          * 返回一个服务包装器
          * 实现transactor中的特权调用
          * 将返回的binder放入android service接口中调用
          */
-        fun getServiceWrapper(transactor:ITransactor):IBinder{
-            return object :Binder(){
+        fun getServiceWrapper(transactor: ITransactor): IBinder {
+            return object : Binder() {
                 override fun queryLocalInterface(descriptor: String): IInterface? {
                     return null
                 }
+
                 override fun onTransact(
                     code: Int,
                     data: Parcel,
                     reply: Parcel?,
                     flags: Int
                 ): Boolean {
-                    val dataProxy=transactor.obtain()
+                    val dataProxy = transactor.obtain()
 
-                    dataProxy.appendFrom(data,0,data.dataSize())
-                    try{
-                        return transactor.transact(code,dataProxy,reply,flags)
-                    }catch (e:Exception){
+                    dataProxy.appendFrom(data, 0, data.dataSize())
+                    try {
+                        return transactor.transact(code, dataProxy, reply, flags)
+                    } catch (e: Exception) {
                         throw e
-                    }finally {
+                    } finally {
                         dataProxy.recycle()
                     }
                 }

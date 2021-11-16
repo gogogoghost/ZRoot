@@ -1,13 +1,13 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
  */
-package site.zbyte.root.aidl;
+package site.zbyte.root.sdk;
 // Declare any non-default types here with import statements
 
 public interface IRemote extends android.os.IInterface
 {
   /** Default implementation for IRemote. */
-  public static class Default implements site.zbyte.root.aidl.IRemote
+  public static class Default implements site.zbyte.root.sdk.IRemote
   {
     //注册一个watcher 用来跟踪app是否死亡 然后runner退出
 
@@ -44,28 +44,28 @@ public interface IRemote extends android.os.IInterface
     }
   }
   /** Local-side IPC implementation stub class. */
-  public static abstract class Stub extends android.os.Binder implements site.zbyte.root.aidl.IRemote
+  public static abstract class Stub extends android.os.Binder implements site.zbyte.root.sdk.IRemote
   {
-    private static final java.lang.String DESCRIPTOR = "site.zbyte.root.aidl.IRemote";
+    private static final java.lang.String DESCRIPTOR = "site.zbyte.root.sdk.IRemote";
     /** Construct the stub at attach it to the interface. */
     public Stub()
     {
       this.attachInterface(this, DESCRIPTOR);
     }
     /**
-     * Cast an IBinder object into an site.zbyte.root.aidl.IRemote interface,
+     * Cast an IBinder object into an site.zbyte.root.sdk.IRemote interface,
      * generating a proxy if needed.
      */
-    public static site.zbyte.root.aidl.IRemote asInterface(android.os.IBinder obj)
+    public static site.zbyte.root.sdk.IRemote asInterface(android.os.IBinder obj)
     {
       if ((obj==null)) {
         return null;
       }
       android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-      if (((iin!=null)&&(iin instanceof site.zbyte.root.aidl.IRemote))) {
-        return ((site.zbyte.root.aidl.IRemote)iin);
+      if (((iin!=null)&&(iin instanceof site.zbyte.root.sdk.IRemote))) {
+        return ((site.zbyte.root.sdk.IRemote)iin);
       }
-      return new site.zbyte.root.aidl.IRemote.Stub.Proxy(obj);
+      return new site.zbyte.root.sdk.IRemote.Stub.Proxy(obj);
     }
     @Override public android.os.IBinder asBinder()
     {
@@ -155,7 +155,7 @@ public interface IRemote extends android.os.IInterface
         }
       }
     }
-    private static class Proxy implements site.zbyte.root.aidl.IRemote
+    private static class Proxy implements site.zbyte.root.sdk.IRemote
     {
       private android.os.IBinder mRemote;
       Proxy(android.os.IBinder remote)
@@ -298,14 +298,14 @@ public interface IRemote extends android.os.IInterface
         }
         return _result;
       }
-      public static site.zbyte.root.aidl.IRemote sDefaultImpl;
+      public static site.zbyte.root.sdk.IRemote sDefaultImpl;
     }
     static final int TRANSACTION_registerWatcher = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
     static final int TRANSACTION_getWorker = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
     static final int TRANSACTION_getCaller = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
     static final int TRANSACTION_getTransactCode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
     static final int TRANSACTION_callContentProvider = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
-    public static boolean setDefaultImpl(site.zbyte.root.aidl.IRemote impl) {
+    public static boolean setDefaultImpl(site.zbyte.root.sdk.IRemote impl) {
       // Only one user of this interface can use this function
       // at a time. This is a heuristic to detect if two different
       // users in the same process use this function.
@@ -318,7 +318,7 @@ public interface IRemote extends android.os.IInterface
       }
       return false;
     }
-    public static site.zbyte.root.aidl.IRemote getDefaultImpl() {
+    public static site.zbyte.root.sdk.IRemote getDefaultImpl() {
       return Stub.Proxy.sDefaultImpl;
     }
   }

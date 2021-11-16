@@ -31,12 +31,12 @@ android {
     }
     android.libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "root-driver" + "-${buildType.name}"+'.aar'
+            outputFileName = "root-driver" + "-${buildType.name}" + '.aar'
         }
     }
     sourceSets {
         main {
-            assets.srcDirs = [buildDir.path+'/assets']
+            assets.srcDirs = [buildDir.path + '/assets']
         }
     }
     ndkVersion '22.0.7026061'
@@ -76,9 +76,9 @@ dependencies {
 //    delete projectDir.path+'/src/main/assets/starter'
 //}
 
-def isWindows=false
+def isWindows = false
 if (System.properties['os.name'].toLowerCase().contains('windows')) {
-    isWindows=true
+    isWindows = true
 }
 
 def localProperties = new File(project.rootDir, "local.properties")
@@ -86,26 +86,32 @@ def properties = new Properties()
 localProperties.withInputStream { instr ->
     properties.load(instr)
 }
-def sdkDir=properties.getProperty('sdk.dir')
 
-task copyRunner(type:Exec,dependsOn: ':runner:makeJar'){
-    def buildToolVersion=project.extensions.findByName('android').getProperties()['buildToolsVersion']
-    def dexFile=sdkDir+'/build-tools/'+buildToolVersion+'/dx'+(isWindows?'.bat':'')
+def sdkDir = properties.getProperty('sdk.dir')
 
-    def srcFile=rootDir.path+'/runner/build/libs/runner.jar'
-    def outFile=project.buildDir.path+'/assets/runner.dex'
+task copyRunner(type: Exec, dependsOn: ':runner:makeJar') {
+    def buildToolVersion = project.extensions.findByName('android').getProperties()['buildToolsVersion']
+    def dexFile = sdkDir + '/build-tools/' + buildToolVersion + '/dx' + (isWindows ? '.bat' : '')
 
-    def assetsDir=new File(outFile).parentFile
-    if(!assetsDir.exists()){
+    def srcFile = rootDir.path + '/runner/build/libs/runner.jar'
+    def outFile = project.buildDir.path + '/assets/runner.dex'
+
+    def assetsDir = new File(outFile).parentFile
+    if (!assetsDir.exists()) {
         assetsDir.mkdirs()
     }
 
     executable(dexFile)
-    args(["--dex","--output",outFile,srcFile])
+    args(["--dex", "--output", outFile, srcFile])
 }
 
 tasks.whenTaskAdded { task ->
     if (task.name == 'generateDebugAssets' || task.name == 'generateReleaseAssets') {
         task.dependsOn(['copyRunner'])
     }
+}
+
+task copyAIDL2runner(type: Copy, dependsOn: ':sdk:compileReleaseAidl') {
+    from(buildDir.path + '/generated/aidl_source_output_dir/release/out/')
+    into(rootDir.path + '/runner/src/main/java/')
 }

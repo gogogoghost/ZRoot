@@ -1,5 +1,6 @@
 package site.zbyte.root.app
 
+import android.annotation.SuppressLint
 import android.app.ActivityManagerNative
 import android.app.IActivityManager
 import android.content.Intent
@@ -7,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import site.zbyte.root.sdk.ZRoot
 import android.os.*
 import android.util.Log
+import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,9 +17,11 @@ class MainActivity : AppCompatActivity() {
         private const val TAG = "MainActivity"
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val textView = findViewById<TextView>(R.id.text)
 
         val zRoot = ZRoot(this)
         zRoot.start(5000) {
@@ -33,8 +38,11 @@ class MainActivity : AppCompatActivity() {
              * invoke remote method
              */
             val msg = worker.work()
-            Log.i(TAG, "from remote: $msg")
-
+            val content = "Message from remote: $msg"
+            Log.i(TAG, content)
+            textView.apply {
+                text = "$text\n$content"
+            }
             /**
              * get remote service
              */

@@ -16,8 +16,11 @@ import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
+
 import java.lang.reflect.Field;
-import site.zbyte.root.aidl.IRemote;
+
+import site.zbyte.root.sdk.IRemote;
+
 
 public class Runner {
 
@@ -79,10 +82,8 @@ public class Runner {
         Looper.prepareMainLooper();
 
         //创建类
-        IBinder finalWorker =
-                Config.RemoteClass.isEmpty()
-                ?null
-                :(IBinder) Class.forName(Config.RemoteClass).newInstance();
+        IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
+                (IBinder) Class.forName(Config.RemoteClass).newInstance();
 
         IBinder executor = new IRemote.Stub() {
 
@@ -138,19 +139,22 @@ public class Runner {
             }
 
             @Override
-            public Bundle callContentProvider(IBinder contentProvider, String packageName,String authority,String methodName, String key, Bundle data) throws RemoteException {
-                IContentProvider provider=ContentProviderNative.asInterface(contentProvider);
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.S){
-                    AttributionSource.Builder builder=new AttributionSource.Builder(0);
+            public Bundle callContentProvider(IBinder contentProvider, String packageName,
+                                              String authority, String methodName, String key,
+                                              Bundle data) throws RemoteException {
+                IContentProvider provider = ContentProviderNative.asInterface(contentProvider);
+                if (provider == null) return null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    AttributionSource.Builder builder = new AttributionSource.Builder(0);
                     builder.setPackageName(packageName);
-                    return provider.call(builder.build(),authority,methodName,key,data);
-                }else if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.R){
-                    return provider.call(packageName,null,authority,methodName,key,data);
+                    return provider.call(builder.build(), authority, methodName, key, data);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    return provider.call(packageName, null, authority, methodName, key, data);
 
-                }else if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-                    return provider.call(packageName,authority,methodName,key,data);
-                }else{
-                    return provider.call(packageName,methodName,key,data);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    return provider.call(packageName, authority, methodName, key, data);
+                } else {
+                    return provider.call(packageName, methodName, key, data);
                 }
             }
         };
