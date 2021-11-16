@@ -120,7 +120,7 @@ This kind of operation will be blocked from Android 9(P), using [AndroidHiddenAp
 3. Open the project with Android Studio, and you can run the `app` module on your device that had root privilege.
 
 ## Contribute
-There are 5 modules in the project: `aidl`, `app`, `hidden_api`, `runner`, `sdk`.
+There are 4 modules in the project: `app`, `hidden_api`, `runner`, `sdk`.
 
 `app`: It's a demo application to show the sample code.
 
