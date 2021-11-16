@@ -11,7 +11,7 @@ android {
     buildToolsVersion '30.0.3'
 
     defaultConfig {
-        minSdkVersion 23
+        minSdkVersion 20
         targetSdkVersion 31
     }
 
@@ -52,29 +52,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compileOnly project(path: ':hidden_api')
 }
-
-//boolean isReleaseBuildType(){
-//    for(String s : gradle.startParameter.taskNames) {
-//        if (s.contains("Release") | s.contains("release")) {
-//            return true
-//        }
-//    }
-//    return false
-//}
-
-//task copyStarterDebug(type:Copy,dependsOn: ['cleanStarter','copyDebugJniLibsProjectOnly']){
-//    from(buildDir.path+"/intermediates/cmake/debug/obj/armeabi-v7a/starter")
-//    into(buildDir.path+'/assets/')
-//}
-//
-//task copyStarterRelease(type:Copy,dependsOn: ['cleanStarter','copyReleaseJniLibsProjectOnly']){
-//    from(buildDir.path+"/intermediates/cmake/release/obj/armeabi-v7a/starter")
-//    into(buildDir.path+'/assets/')
-//}
-//
-//task cleanStarter(type:Delete){
-//    delete projectDir.path+'/src/main/assets/starter'
-//}
 
 def isWindows = false
 if (System.properties['os.name'].toLowerCase().contains('windows')) {

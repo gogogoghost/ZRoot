@@ -1,4 +1,4 @@
 cd builder
 rm -rf build/repo/*
-./gradlew uploadArchives
+./gradlew publish
 
