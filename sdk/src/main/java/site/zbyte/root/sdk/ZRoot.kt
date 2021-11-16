@@ -78,20 +78,29 @@ class ZRoot(private val context: Context) {
         //写入starter
         val so = "lib/${Build.SUPPORTED_ABIS[0]}/libstarter.so"
 
-        val ai = context.applicationInfo
-
         val fos = FileOutputStream(path)
-        val apk = ZipFile(ai.sourceDir)
+        val apk = ZipFile(context.applicationInfo.sourceDir)
         val entries = apk.entries()
+        var found=false
         while (entries.hasMoreElements()) {
             val entry = entries.nextElement() ?: break
-            if (entry.name != so) continue
-            apk.getInputStream(entry).copyTo(fos)
-            fos.flush()
-            fos.close()
-            break
+            if(entry.name.startsWith("lib/")){
+                for(abi in Build.SUPPORTED_ABIS){
+                    if(entry.name=="lib/$abi/libstarter.so"){
+                        apk.getInputStream(entry).copyTo(fos)
+                        fos.flush()
+                        fos.close()
+                        found=true
+                        break
+                    }
+                }
+                if(found)
+                    break
+            }
         }
         apk.close()
+        if(!found)
+            throw Exception("No support starter for current device")
     }
 
     /**
