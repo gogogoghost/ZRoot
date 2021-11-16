@@ -93,7 +93,7 @@ zRoot.getExecutor()!!.callContentProvider(
 
 #### Run custom code(service) on remote root process
 
-See [ZRoot-builder](https://github.com/gogogoghost/ZRoot-builder)
+See [ZRoot-builder](https://github.com/gogogoghost/ZRoot-builder).
 
 ## AndroidHiddenApiBypass
 
@@ -111,7 +111,7 @@ This kind of operation will be blocked from Android 9(P), using [AndroidHiddenAp
 2. Enter the `ZRoot/builder` directory and run the following command.
 
     For Linux: 
-    ``` ./gradlew.sh uploadArchives  ```
+    ``` ./gradlew uploadArchives  ```
 
     For Windows:
     ``` gradlew.bat uploadArchives ```
