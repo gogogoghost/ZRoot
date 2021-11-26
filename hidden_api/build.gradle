@@ -27,4 +27,6 @@ android {
 }
 
 dependencies {
+    annotationProcessor "dev.rikka.tools.refine:annotation-processor:${hidden_tool_version}"
+    compileOnly "dev.rikka.tools.refine:annotation:${hidden_tool_version}"
 }
