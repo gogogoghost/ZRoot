@@ -23,10 +23,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val textView = findViewById<TextView>(R.id.text)
 
-        val zRoot = ZRoot(this)
-        zRoot.start(5000) {
+        ZRoot.Starter(this).start(5000) {zRoot->
             //start fail
-            if (!it)
+            if (zRoot==null)
                 return@start
 
             /**

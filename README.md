@@ -22,10 +22,9 @@ compileOnly project(path: ':hidden_api')
 
 Add it in your root build.gradle at the end of repositories:
 
-```css
+```groovy
 allprojects {
     repositories {
-        ...
         maven { url 'https://jitpack.io' }
     }
 }
@@ -33,7 +32,7 @@ allprojects {
 
 Add the dependency	 		
 
-```css
+```groovy
 dependencies {
     implementation 'site.zbyte:zroot:${version}'
 }
@@ -43,21 +42,15 @@ dependencies {
 
 ```kotlin
 /**
- * create a instance
- */
-val zRoot = ZRoot(this)
-
-/**
  * start by blocked api with 5000ms timeout
- * return true if succeed
  */
-val succeed = zRoot.startBlock(5000)
+val zRoot = ZRoot.Starter(context).startBlock(5000)
 
 /**
  * start by async api with 5000ms timeout
  */
-zRoot.start(5000) { it ->
-    //it will be true if succeed
+ZRoot.Starter(context).start(5000) { zRoot ->
+    //use zRoot
 }
 ```
 
