@@ -23,8 +23,6 @@ class ZRoot(private val context: Context) {
 
     private var runnerReceiver: BroadcastReceiver? = null
 
-    private var randomString = ""
-
     private var deadCallback: (() -> Unit)? = null
 
     init {
@@ -37,21 +35,14 @@ class ZRoot(private val context: Context) {
     }
 
     /**
-     * 更新随机字符串
-     */
-    private fun updateRandomString() {
-        randomString = getRandomString(6)
-    }
-
-    /**
      * 启动receiver
      */
     private fun startReceiver() {
         val filter = IntentFilter()
         filter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-        filter.addAction("site.zbyte.root.SEND_RUNNER.${randomString}")
+        filter.addAction(context.packageName+".TRANSFER")
         runnerReceiver = RunnerReceiver(this)
-        context.registerReceiver(runnerReceiver, filter, null, subHandler)
+        context.registerReceiver(runnerReceiver, filter, "site.zbyte.root.permission.TRANSFER", subHandler)
     }
 
     /**
@@ -133,7 +124,7 @@ class ZRoot(private val context: Context) {
             output.write(
                 "$starterRealPath " +
                         "$dexRealPath " +
-                        randomString +
+                        context.packageName +
                         "&&exit\n"
             )
             output.flush()
@@ -160,8 +151,6 @@ class ZRoot(private val context: Context) {
             asyncStarting = false
             return
         }
-
-        updateRandomString()
 
         startReceiver()
 
@@ -198,7 +187,6 @@ class ZRoot(private val context: Context) {
             return true
         }
 
-        updateRandomString()
         startReceiver()
         if (!startProcess()) {
             stopReceiver()

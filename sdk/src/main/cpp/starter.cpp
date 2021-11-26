@@ -15,14 +15,12 @@ int main(int argc,char* argv[]){
 
 
     char* path=argv[1];
-//    char* pkgName=argv[2];
-//    char* clsName=argv[3];
-    char* randomString=argv[2];
+
+    char* packageName=argv[2];
 
     //修改目标文件信息
-//     chown(argv[0], 2000, 2000);
     se::setfilecon(argv[0], "u:object_r:shell_data_file:s0");
-//     chown(path, 2000, 2000);
+
     se::setfilecon(path, "u:object_r:shell_data_file:s0");
 
     //修改context
@@ -53,9 +51,7 @@ int main(int argc,char* argv[]){
         	const_cast<char *>("/system/bin"),
         	nice_name,
         	const_cast<char *>("site.zbyte.root.Runner"),
-        	//const_cast<char *>(pkgName),
-        	//const_cast<char *>(clsName),
-        	const_cast<char *>(randomString),
+        	const_cast<char *>(packageName),
         	nullptr
         };
         execvp(appProcessArgs[0], appProcessArgs);

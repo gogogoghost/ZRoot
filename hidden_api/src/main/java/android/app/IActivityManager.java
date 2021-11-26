@@ -16,7 +16,7 @@ public interface IActivityManager {
     /**
      * 发送广播
      */
-    public abstract int broadcastIntent(IApplicationThread caller,
+    int broadcastIntent(IApplicationThread caller,
                                         Intent intent, String resolvedType, IIntentReceiver resultTo,
                                         int resultCode, String resultData, Bundle resultExtras,
                                         String[] requiredPermissions, int appOp, Bundle bOptions,

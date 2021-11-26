@@ -7,6 +7,7 @@ import android.content.AttributionSource;
 import android.content.ContentProviderNative;
 import android.content.IContentProvider;
 import android.content.Intent;
+import android.content.IntentHidden;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,7 +71,7 @@ public class Runner {
         if (args.length != 1) {
             throw new Exception("Bad args");
         }
-        String randomString = args[0];
+        String packageName = args[0];
         IActivityManager mAm;
         IBinder activityRaw = getService("activity");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -160,18 +161,8 @@ public class Runner {
         };
 
 
-        Intent intent = new Intent("site.zbyte.root.SEND_RUNNER." + randomString);
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        //receive from shell
-        try {
-            @SuppressLint("SoonBlockedPrivateApi")
-            Field field = Intent.class.getDeclaredField("FLAG_RECEIVER_FROM_SHELL");
-            int code = field.getInt(null);
-            intent.addFlags(code);
-        } catch (Exception e) {
-            Log.d("runner", e.toString());
-        }
-
+        Intent intent = new Intent(packageName+".TRANSFER");
+        intent.setPackage(packageName);
 
         Bundle bundle = new Bundle();
         bundle.putBinder("runner", executor);
@@ -187,7 +178,7 @@ public class Runner {
                 0,
                 null,
                 null,
-                null,
+                new String[]{"site.zbyte.root.permission.TRANSFER"},
                 0,
                 null,
                 true,

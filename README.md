@@ -1,4 +1,6 @@
 # ZRoot
+[![](https://jitpack.io/v/site.zbyte/zroot.svg)](https://jitpack.io/#site.zbyte/zroot)
+
 ZRoot is a library that makes it easy to use root on Android, such as calling system service with root privilege.
 
 ## Usage
@@ -18,8 +20,23 @@ compileOnly project(path: ':hidden_api')
 
 #### Add Dependency
 
-```groovy
-implementation 'waiting to publish...'
+Add it in your root build.gradle at the end of repositories:
+
+```css
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Add the dependency	 		
+
+```css
+dependencies {
+    implementation 'site.zbyte:zroot:${version}'
+}
 ```
 
 #### Start ZRoot
@@ -81,7 +98,7 @@ val holder = mAm.getContentProviderExternal(authority, 0, null,null)
  */
 val bundle = Bundle()
 bundle.putString("value", "1")
-zRoot.getExecutor()!!.callContentProvider(
+zRoot.callContentProvider(
     holder.provider.asBinder(),
     "android",
     authority,
