@@ -219,16 +219,6 @@ class ZRoot(private val context: Context) {
         }
     }
 
-    private fun getRandomString(length: Int): String {
-        val str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        val sb = StringBuffer()
-        for (i in 0 until length) {
-            val number: Int = Random.nextInt(str.length)
-            sb.append(str[number])
-        }
-        return sb.toString()
-    }
-
     /**
      * 获取用户自定义远程worker
      */
