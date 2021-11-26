@@ -178,7 +178,7 @@ public class Runner {
                 0,
                 null,
                 null,
-                new String[]{"site.zbyte.root.permission.TRANSFER"},
+                null,
                 0,
                 null,
                 true,

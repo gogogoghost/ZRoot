@@ -2,12 +2,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="site.zbyte.root.sdk">
 
-    <permission
-        android:name="site.zbyte.root.permission.TRANSFER"
-        android:label="@string/visit_root"
-        android:description="@string/visit_root_desc"
-        android:protectionLevel="normal" />
-
-    <uses-permission android:name="site.zbyte.root.permission.TRANSFER"/>
 
 </manifest>

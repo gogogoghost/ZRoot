@@ -33,6 +33,7 @@ class ZRoot private constructor(private val remote: IRemote) {
                 remote.registerWatcher(Binder())
                 cb(remote)
             }
+            //使用一个不存在的权限 以便通过non-protected broadcast check
             context.registerReceiver(runnerReceiver, filter, "site.zbyte.root.permission.TRANSFER", subHandler)
         }
 
