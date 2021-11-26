@@ -4,235 +4,205 @@ import android.content.*
 import android.os.*
 import java.io.*
 import java.util.zip.ZipFile
-import kotlin.random.Random
 
-class ZRoot(private val context: Context) {
+class ZRoot private constructor(private val remote: IRemote) {
 
-    private var asyncStarting = false
+    class Starter(private val context: Context){
+        private val handler = Handler(Looper.getMainLooper())
 
-    private val handler = Handler(Looper.getMainLooper())
+        private val subThread = HandlerThread("runner")
+        private val subHandler: Handler
 
-    private val subThread = HandlerThread("runner")
-    private val subHandler: Handler
+        private var runnerReceiver: BroadcastReceiver? = null
 
-    private val lock = Object()
+        private val lock = Object()
 
-    private var rawRemote: IRemote? = null
-    private var worker: IBinder? = null
-    private var caller: IBinder? = null
+        init {
+            subThread.start()
+            subHandler= Handler(subThread.looper)
+        }
+        /**
+         * 启动receiver
+         */
+        private fun startReceiver(cb:(IRemote)->Unit) {
+            val filter = IntentFilter()
+            filter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
+            filter.addAction(context.packageName+".TRANSFER")
+            runnerReceiver = RunnerReceiver{
+                val remote=IRemote.Stub.asInterface(it)
+                remote.registerWatcher(Binder())
+                cb(remote)
+            }
+            context.registerReceiver(runnerReceiver, filter, "site.zbyte.root.permission.TRANSFER", subHandler)
+        }
 
-    private var runnerReceiver: BroadcastReceiver? = null
+        /**
+         * 注销receiver
+         */
+        private fun stopReceiver() {
+            context.unregisterReceiver(runnerReceiver)
+        }
+
+        /**
+         * dex写入到cache目录
+         */
+        private fun writeDex(path: String) {
+            //写入dex
+            val dex = context.assets.open("runner.dex")
+            val dexTmp = File(path)
+            dexTmp.writeBytes(dex.readBytes())
+        }
+
+        /**
+         * starter写入到cache目录
+         */
+        private fun writeStarter(path: String) {
+            //写入starter
+            val fos = FileOutputStream(path)
+            val apk = ZipFile(context.applicationInfo.sourceDir)
+            val entries = apk.entries()
+            var found=false
+            while (entries.hasMoreElements()) {
+                val entry = entries.nextElement() ?: break
+                if(entry.name.startsWith("lib/")){
+                    for(abi in Build.SUPPORTED_ABIS){
+                        if(entry.name=="lib/$abi/libstarter.so"){
+                            apk.getInputStream(entry).copyTo(fos)
+                            fos.flush()
+                            fos.close()
+                            found=true
+                            break
+                        }
+                    }
+                    if(found)
+                        break
+                }
+            }
+            apk.close()
+            if(!found)
+                throw Exception("No support starter for current device")
+        }
+
+        /**
+         * 启动runner进程
+         */
+        private fun startProcess(): Boolean {
+            try {
+                //此处无权限可能会抛出异常
+                val process = Runtime.getRuntime().exec("su")
+
+                val dir = "/data/local/tmp/${context.packageName}.root-driver"
+
+                val dexTmpPath = context.externalCacheDir!!.absolutePath + "/runner.tmp"
+                val dexRealPath = "${dir}/runner.dex"
+
+                val starterTmpPath = context.externalCacheDir!!.absolutePath + "/starter.tmp"
+                val starterRealPath = "${dir}/starter"
+
+
+                writeDex(dexTmpPath)
+                writeStarter(starterTmpPath)
+
+                val output = OutputStreamWriter(process.outputStream)
+                //重命名
+                output.write("rm -rf $dir\n")
+                output.write("mkdir ${dir}\n")
+                output.write("mv $dexTmpPath $dexRealPath\n")
+                output.write("mv $starterTmpPath ${starterRealPath}\n")
+                output.write("chown -R shell:shell ${dir}\n")
+                output.write("chmod +x ${starterRealPath}\n")
+                output.write(
+                    "$starterRealPath " +
+                            "$dexRealPath " +
+                            context.packageName +
+                            "&&exit\n"
+                )
+                output.flush()
+                return process.waitFor() == 0
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return false
+            }
+        }
+
+        /**
+         * 异步start
+         */
+        @Synchronized
+        fun start(timeout: Long, callback: (ZRoot?) -> Unit) {
+            var obj:ZRoot?=null
+            startReceiver{
+                obj= ZRoot(it)
+                synchronized(lock) {
+                    lock.notify()
+                }
+            }
+            if (!startProcess()) {
+                stopReceiver()
+                callback.invoke(null)
+                return
+            }
+
+            //开启等待超时线程
+            Thread {
+                synchronized(lock) {
+                    lock.wait(timeout)
+                }
+                stopReceiver()
+                //没被打断 超时了
+                handler.post {
+                    callback.invoke(obj)
+                }
+            }.start()
+        }
+
+        /**
+         * 同步start
+         */
+        @Synchronized
+        fun startBlocked(timeout: Long): ZRoot? {
+            var obj:ZRoot?=null
+            startReceiver{
+                obj= ZRoot(it)
+                synchronized(lock) {
+                    lock.notify()
+                }
+            }
+            if (!startProcess()) {
+                stopReceiver()
+                return null
+            }
+            //等待
+            synchronized(lock) {
+                lock.wait(timeout)
+            }
+            stopReceiver()
+            return obj
+        }
+    }
+
+    private var worker=remote.worker
+    private var caller=remote.caller
 
     private var deadCallback: (() -> Unit)? = null
 
     init {
-        subThread.start()
-        subHandler = Handler(subThread.looper)
+        remote.asBinder().linkToDeath({
+             deadCallback?.invoke()
+        },0)
     }
 
+    /**
+     * 注册一个死亡回调
+     */
     fun registerDeadCallback(callback: () -> Unit) {
         this.deadCallback = callback
     }
 
     /**
-     * 启动receiver
-     */
-    private fun startReceiver() {
-        val filter = IntentFilter()
-        filter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-        filter.addAction(context.packageName+".TRANSFER")
-        runnerReceiver = RunnerReceiver(this)
-        context.registerReceiver(runnerReceiver, filter, "site.zbyte.root.permission.TRANSFER", subHandler)
-    }
-
-    /**
-     * 注销receiver
-     */
-    private fun stopReceiver() {
-        context.unregisterReceiver(runnerReceiver)
-    }
-
-    /**
-     * dex写入到cache目录
-     */
-    private fun writeDex(path: String) {
-        //写入dex
-        val dex = context.assets.open("runner.dex")
-        val dexTmp = File(path)
-        dexTmp.writeBytes(dex.readBytes())
-    }
-
-    /**
-     * starter写入到cache目录
-     */
-    private fun writeStarter(path: String) {
-        //写入starter
-        val so = "lib/${Build.SUPPORTED_ABIS[0]}/libstarter.so"
-
-        val fos = FileOutputStream(path)
-        val apk = ZipFile(context.applicationInfo.sourceDir)
-        val entries = apk.entries()
-        var found=false
-        while (entries.hasMoreElements()) {
-            val entry = entries.nextElement() ?: break
-            if(entry.name.startsWith("lib/")){
-                for(abi in Build.SUPPORTED_ABIS){
-                    if(entry.name=="lib/$abi/libstarter.so"){
-                        apk.getInputStream(entry).copyTo(fos)
-                        fos.flush()
-                        fos.close()
-                        found=true
-                        break
-                    }
-                }
-                if(found)
-                    break
-            }
-        }
-        apk.close()
-        if(!found)
-            throw Exception("No support starter for current device")
-    }
-
-    /**
-     * 启动runner进程
-     */
-    private fun startProcess(): Boolean {
-        try {
-            val process = Runtime.getRuntime().exec("su")
-
-            val dir = "/data/local/tmp/${context.packageName}.root-driver"
-
-            val dexTmpPath = context.externalCacheDir!!.absolutePath + "/runner.tmp"
-            val dexRealPath = "${dir}/runner.dex"
-
-            val starterTmpPath = context.externalCacheDir!!.absolutePath + "/starter.tmp"
-            val starterRealPath = "${dir}/starter"
-
-
-            writeDex(dexTmpPath)
-            writeStarter(starterTmpPath)
-
-            val output = OutputStreamWriter(process.outputStream)
-            //重命名
-            output.write("rm -rf $dir\n")
-            output.write("mkdir ${dir}\n")
-            output.write("mv $dexTmpPath $dexRealPath\n")
-            output.write("mv $starterTmpPath ${starterRealPath}\n")
-            output.write("chown -R shell:shell ${dir}\n")
-            output.write("chmod +x ${starterRealPath}\n")
-            output.write(
-                "$starterRealPath " +
-                        "$dexRealPath " +
-                        context.packageName +
-                        "&&exit\n"
-            )
-            output.flush()
-            return process.waitFor() == 0
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
-        }
-    }
-
-    /**
-     * 异步start
-     */
-    @Synchronized
-    fun start(timeout: Long, callback: (Boolean) -> Unit) {
-        if (asyncStarting) {
-            throw Exception("Already under starting")
-        }
-        asyncStarting = true
-
-        if (worker != null) {
-            //主线程 直接发送
-            callback.invoke(true)
-            asyncStarting = false
-            return
-        }
-
-        startReceiver()
-
-        if (!startProcess()) {
-            stopReceiver()
-            callback.invoke(false)
-            asyncStarting = false
-            return
-        }
-
-        //开启等待超时线程
-        Thread {
-            synchronized(lock) {
-                lock.wait(timeout)
-            }
-            stopReceiver()
-            //没被打断 超时了
-            handler.post {
-                callback.invoke(worker != null)
-            }
-            asyncStarting = false
-        }.start()
-    }
-
-    /**
-     * 同步start
-     */
-    @Synchronized
-    fun startBlocked(timeout: Long): Boolean {
-        if (asyncStarting) {
-            throw Exception("Already under getting")
-        }
-        if (worker != null) {
-            return true
-        }
-
-        startReceiver()
-        if (!startProcess()) {
-            stopReceiver()
-            return false
-        }
-        //等待
-        synchronized(lock) {
-            lock.wait(timeout)
-        }
-        stopReceiver()
-        return worker != null
-    }
-
-    fun onReceive(binder: IBinder) {
-        val raw = IRemote.Stub.asInterface(binder)
-        raw.asBinder().linkToDeath({
-            rawRemote = null
-            worker = null
-            caller = null
-            handler.post {
-                deadCallback?.invoke()
-            }
-        }, 0)
-        raw.registerWatcher(Binder())
-        rawRemote = raw
-        worker = raw.worker
-        caller = raw.caller
-        synchronized(lock) {
-            lock.notify()
-        }
-    }
-
-    private fun getRandomString(length: Int): String {
-        val str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        val sb = StringBuffer()
-        for (i in 0 until length) {
-            val number: Int = Random.nextInt(str.length)
-            sb.append(str[number])
-        }
-        return sb.toString()
-    }
-
-    /**
      * 获取用户自定义远程worker
      */
-    fun getWorker(): IBinder? {
+    fun getWorker(): IBinder {
         return worker
     }
 
@@ -249,7 +219,7 @@ class ZRoot(private val context: Context) {
             }
 
             override fun transact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-                return caller!!.transact(code, data, reply, flags)
+                return caller.transact(code, data, reply, flags)
             }
         })
     }
@@ -258,7 +228,7 @@ class ZRoot(private val context: Context) {
      * 调用远程去call ContentProvider
      */
     fun callContentProvider(contentProvider:IBinder,packageName:String,authority:String,methodName:String,key:String,data:Bundle):Bundle?{
-        return rawRemote!!.callContentProvider(contentProvider, packageName, authority, methodName, key, data)
+        return remote.callContentProvider(contentProvider, packageName, authority, methodName, key, data)
     }
 
     companion object {
