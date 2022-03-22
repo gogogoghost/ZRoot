@@ -26,15 +26,14 @@ class ZRoot private constructor(private val remote: IRemote) {
          */
         private fun startReceiver(cb:(IRemote)->Unit) {
             val filter = IntentFilter()
-            filter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-            filter.addAction(context.packageName+".TRANSFER")
+            filter.addAction(context.packageName+".ZR_TRANSFER")
             runnerReceiver = RunnerReceiver{
                 val remote=IRemote.Stub.asInterface(it)
                 remote.registerWatcher(Binder())
                 cb(remote)
             }
             //使用一个不存在的权限 以便通过non-protected broadcast check
-            context.registerReceiver(runnerReceiver, filter, "site.zbyte.root.permission.TRANSFER", subHandler)
+            context.registerReceiver(runnerReceiver, filter, "site.zbyte.root.permission.ZR_TRANSFER", subHandler)
         }
 
         /**

@@ -16,6 +16,7 @@ import android.os.Looper;
 import android.os.Parcel;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.UserHandle;
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -161,7 +162,7 @@ public class Runner {
         };
 
 
-        Intent intent = new Intent(packageName+".TRANSFER");
+        Intent intent = new Intent(packageName+".ZR_TRANSFER");
         intent.setPackage(packageName);
 
         Bundle bundle = new Bundle();
@@ -170,7 +171,7 @@ public class Runner {
         intent.putExtras(bundle);
 
 
-        mAm.broadcastIntent(
+        int res=mAm.broadcastIntent(
                 null,
                 intent,
                 intent.getType(),
@@ -179,12 +180,18 @@ public class Runner {
                 null,
                 null,
                 null,
-                0,
+                //OP_NONE
+                -1,
                 null,
                 true,
                 false,
                 0
         );
+        if(res!=0){
+            //Fail
+            Log.w(TAG,"broadcast fail with result:"+res);
+            System.exit(-2);
+        }
         checkStarted();
         Looper.loop();
     }
