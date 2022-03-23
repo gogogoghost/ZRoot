@@ -183,6 +183,7 @@ class ZRoot private constructor(private val remote: IRemote) {
 
     private var worker=remote.worker
     private var caller=remote.caller
+    private val transactor=RootTransactor(this)
 
     private var deadCallback: (() -> Unit)? = null
 
@@ -207,21 +208,18 @@ class ZRoot private constructor(private val remote: IRemote) {
     }
 
     /**
-     * 获取一个使用起来比较简单的服务
+     * 获取一个代理的ServiceManager中的服务binder
      */
     fun getRemoteService(name: String): IBinder {
         val service = ServiceManager.getService(name)
-        return getServiceWrapper(object : ITransactor {
-            override fun obtain(): Parcel {
-                val parcel = Parcel.obtain()
-                parcel.writeStrongBinder(service)
-                return parcel
-            }
+        return BinderProxy(service,transactor)
+    }
 
-            override fun transact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-                return caller.transact(code, data, reply, flags)
-            }
-        })
+    /**
+     * 获取一个自定义binder的root代理
+     */
+    fun makeBinderProxy(origin:IBinder):IBinder{
+        return BinderProxy(origin,transactor)
     }
 
     /**
@@ -231,36 +229,21 @@ class ZRoot private constructor(private val remote: IRemote) {
         return remote.callContentProvider(contentProvider, packageName, authority, methodName, key, data)
     }
 
-    companion object {
-        /**
-         * 返回一个服务包装器
-         * 实现transactor中的特权调用
-         * 将返回的binder放入android service接口中调用
-         */
-        fun getServiceWrapper(transactor: ITransactor): IBinder {
-            return object : Binder() {
-                override fun queryLocalInterface(descriptor: String): IInterface? {
-                    return null
-                }
+    /**
+     * 自定义transact转发
+     */
+    class RootTransactor(private val zRoot:ZRoot):ITransactor{
+        override fun obtain(origin: IBinder, originData: Parcel): Parcel {
+            val dataProxy=Parcel.obtain()
+            //先写入origin
+            dataProxy.writeStrongBinder(origin)
+            //再写入data
+            dataProxy.appendFrom(originData, 0, originData.dataSize())
+            return dataProxy
+        }
 
-                override fun onTransact(
-                    code: Int,
-                    data: Parcel,
-                    reply: Parcel?,
-                    flags: Int
-                ): Boolean {
-                    val dataProxy = transactor.obtain()
-
-                    dataProxy.appendFrom(data, 0, data.dataSize())
-                    try {
-                        return transactor.transact(code, dataProxy, reply, flags)
-                    } catch (e: Exception) {
-                        throw e
-                    } finally {
-                        dataProxy.recycle()
-                    }
-                }
-            }
+        override fun transact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
+            return zRoot.caller.transact(code, data, reply, flags)
         }
     }
 }

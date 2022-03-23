@@ -9,7 +9,6 @@ import site.zbyte.root.sdk.ZRoot
 import android.os.*
 import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 text = "$text\n$content"
             }
             /**
-             * get remote service
+             * get default remote service
              */
             val remoteService = zRoot.getRemoteService("activity")
 
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 null,
                 null,
                 null,
-                0,
+                -1,
                 null,
                 true,
                 false,
@@ -99,6 +98,23 @@ class MainActivity : AppCompatActivity() {
                 "accessibility_enabled",
                 bundle
             )
+
+            /**
+             * proxy an existing local binder
+             */
+            val existingBinder=ServiceManager.getService("activity")
+
+            /**
+             * get a proxy
+             */
+            val proxyBinder=zRoot.makeBinderProxy(existingBinder)
+            /**
+             * now use mAm2 will be same as using mAm
+             */
+            val mAm2 = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                IActivityManager.Stub.asInterface(proxyBinder)
+            else
+                ActivityManagerNative.asInterface(proxyBinder)
         }
     }
 }

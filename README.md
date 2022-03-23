@@ -101,6 +101,30 @@ zRoot.callContentProvider(
 )
 ```
 
+#### Use an existing binder with root
+```kotlin
+/**
+ * proxy an existing local binder
+ */
+val existingBinder=ServiceManager.getService("activity")
+
+/**
+ * get a proxy
+ */
+val proxyBinder=zRoot.makeBinderProxy(existingBinder)
+
+/**
+ * convert to IActivityManager
+ */
+val mAm = IActivityManager.Stub.asInterface(service)
+
+/**
+ * call remote api
+ * mAm.broadcastIntent...
+ * mAm.startActivity...
+ */
+```
+
 #### Run custom code(service) on remote root process
 
 See [ZRoot-builder](https://github.com/gogogoghost/ZRoot-builder).
