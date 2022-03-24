@@ -1,0 +1,216 @@
+-- Merging decision tree log ---
+provider#rikka.shizuku.ShizukuProvider
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:37:9-43:82
+	android:enabled
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:41:13-35
+	android:authorities
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:39:13-59
+	android:multiprocess
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:40:13-41
+	android:exported
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:42:13-36
+	android:permission
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:43:13-79
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:38:13-57
+manifest
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+MERGED from [androidx.core:core-ktx:1.7.0] /home/ghost/.gradle/caches/transforms-3/ea3101347598270ae0e7feeac14b949c/transformed/jetified-core-ktx-1.7.0/AndroidManifest.xml:2:1-9:12
+MERGED from [:sdk] /home/ghost/project/ZRoot/sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.appcompat:appcompat:1.3.1] /home/ghost/.gradle/caches/transforms-3/c27de1dc9161a0cbdba1235f94999542/transformed/appcompat-1.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:2:1-20:12
+MERGED from [dev.rikka.shizuku:api:11.0.2] /home/ghost/.gradle/caches/transforms-3/65ec9166e3d1c5cb1b4a81262addad33/transformed/jetified-api-11.0.2/AndroidManifest.xml:2:1-11:12
+MERGED from [org.lsposed.hiddenapibypass:hiddenapibypass:2.0] /home/ghost/.gradle/caches/transforms-3/8aecef6650e857bf3dd2da4b935e1a5e/transformed/jetified-hiddenapibypass-2.0/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.fragment:fragment:1.3.6] /home/ghost/.gradle/caches/transforms-3/3c3e063922a1aa016abb1c755f262297/transformed/fragment-1.3.6/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.2.4] /home/ghost/.gradle/caches/transforms-3/ad827a93fabaa2db0f977575a8c9e24f/transformed/jetified-activity-1.2.4/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat-resources:1.3.1] /home/ghost/.gradle/caches/transforms-3/3202497f794f51a1668bedbf59af25fa/transformed/jetified-appcompat-resources-1.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/ghost/.gradle/caches/transforms-3/fae3606bf69e5569406a3c3737d5f362/transformed/drawerlayout-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/ghost/.gradle/caches/transforms-3/02e967905d35cb592904bab6bac97721/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/ghost/.gradle/caches/transforms-3/35d466ab8aca29bea7dc8e56c80e741c/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/ghost/.gradle/caches/transforms-3/ea5b4de2f8683eac64b26b11c326d71f/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/ghost/.gradle/caches/transforms-3/22760c16397a683b0f48cd538430f254/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview:1.0.0] /home/ghost/.gradle/caches/transforms-3/cf3dbbe9f0f6eb4894c45f5eb649c086/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.7.0] /home/ghost/.gradle/caches/transforms-3/3337118a38029288edd53ff742d7a6e1/transformed/core-1.7.0/AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/ghost/.gradle/caches/transforms-3/6bc70adc13119291e5af9f60ab86bcc4/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] /home/ghost/.gradle/caches/transforms-3/fe69e33aa4ec00ff5749c4c1f0c2bda5/transformed/jetified-lifecycle-viewmodel-savedstate-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.savedstate:savedstate:1.1.0] /home/ghost/.gradle/caches/transforms-3/c619a8634ec42d2c054f400227e90115/transformed/jetified-savedstate-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /home/ghost/.gradle/caches/transforms-3/e5ccc677755abe9ca6e269a55ce50d2b/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] /home/ghost/.gradle/caches/transforms-3/bfe7b529144777b7ef8ef69a396ec06e/transformed/lifecycle-viewmodel-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [dev.rikka.shizuku:shared:11.0.2] /home/ghost/.gradle/caches/transforms-3/391fac1179a949daca3b63160152b0fe/transformed/jetified-shared-11.0.2/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/ghost/.gradle/caches/transforms-3/1577bf7f5a28fa0282737394a7b457e1/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/ghost/.gradle/caches/transforms-3/8c4b36addbd349aa6cc33f49d72a59b7/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/ghost/.gradle/caches/transforms-3/7699daac6446d9795e4a8dce8f4a176c/transformed/lifecycle-livedata-2.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] /home/ghost/.gradle/caches/transforms-3/e56a1af5824fa0c81de4a4e4820fe7cb/transformed/lifecycle-livedata-core-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/ghost/.gradle/caches/transforms-3/91b46d932ef03499d483b138acb5195a/transformed/core-runtime-2.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/ghost/.gradle/caches/transforms-3/cc7f6ae153c315a33287d44cf4d1f1d5/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [dev.rikka.shizuku:aidl:11.0.2] /home/ghost/.gradle/caches/transforms-3/5ab202f5d3759be1d00ec8ec8b946437/transformed/jetified-aidl-11.0.2/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] /home/ghost/.gradle/caches/transforms-3/c4851004f571ab566112bfcfb56afe3a/transformed/jetified-annotation-experimental-1.1.0/AndroidManifest.xml:17:1-24:12
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+	package
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:3:5-34
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:1-47:12
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:2:11-69
+application
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:5:5-45:19
+MERGED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:14:5-18:19
+MERGED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:14:5-18:19
+MERGED from [androidx.core:core:1.7.0] /home/ghost/.gradle/caches/transforms-3/3337118a38029288edd53ff742d7a6e1/transformed/core-1.7.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.7.0] /home/ghost/.gradle/caches/transforms-3/3337118a38029288edd53ff742d7a6e1/transformed/core-1.7.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/ghost/.gradle/caches/transforms-3/1577bf7f5a28fa0282737394a7b457e1/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/ghost/.gradle/caches/transforms-3/1577bf7f5a28fa0282737394a7b457e1/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.7.0] /home/ghost/.gradle/caches/transforms-3/3337118a38029288edd53ff742d7a6e1/transformed/core-1.7.0/AndroidManifest.xml:24:18-86
+	android:supportsRtl
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:11:9-35
+	android:label
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:9:9-41
+	tools:ignore
+		ADDED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:14:18-69
+	android:roundIcon
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:10:9-54
+	android:icon
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:8:9-43
+	android:allowBackup
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:7:9-35
+	android:theme
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:12:9-47
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:6:9-28
+activity#site.zbyte.root.app.MainActivity
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:13:9-21:20
+	android:exported
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:15:13-36
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:14:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:16:13-20:29
+action#android.intent.action.MAIN
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:17:17-69
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:17:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:19:17-77
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:19:27-74
+service#site.zbyte.root.app.AutoKillService
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:23:9-35:19
+	android:label
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:26:13-38
+	android:exported
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:25:13-37
+	android:permission
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:27:13-79
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:24:13-44
+intent-filter#action:name:android.accessibilityservice.AccessibilityService
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:28:13-30:29
+action#android.accessibilityservice.AccessibilityService
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:29:17-92
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:29:25-89
+meta-data#android.accessibilityservice
+ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:32:13-34:57
+	android:resource
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:34:17-54
+	android:name
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:33:17-60
+uses-sdk
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+MERGED from [androidx.core:core-ktx:1.7.0] /home/ghost/.gradle/caches/transforms-3/ea3101347598270ae0e7feeac14b949c/transformed/jetified-core-ktx-1.7.0/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.7.0] /home/ghost/.gradle/caches/transforms-3/ea3101347598270ae0e7feeac14b949c/transformed/jetified-core-ktx-1.7.0/AndroidManifest.xml:5:5-7:41
+MERGED from [:sdk] /home/ghost/project/ZRoot/sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [:sdk] /home/ghost/project/ZRoot/sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat:1.3.1] /home/ghost/.gradle/caches/transforms-3/c27de1dc9161a0cbdba1235f94999542/transformed/appcompat-1.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat:1.3.1] /home/ghost/.gradle/caches/transforms-3/c27de1dc9161a0cbdba1235f94999542/transformed/appcompat-1.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:8:5-10:41
+MERGED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:8:5-10:41
+MERGED from [dev.rikka.shizuku:api:11.0.2] /home/ghost/.gradle/caches/transforms-3/65ec9166e3d1c5cb1b4a81262addad33/transformed/jetified-api-11.0.2/AndroidManifest.xml:7:5-9:41
+MERGED from [dev.rikka.shizuku:api:11.0.2] /home/ghost/.gradle/caches/transforms-3/65ec9166e3d1c5cb1b4a81262addad33/transformed/jetified-api-11.0.2/AndroidManifest.xml:7:5-9:41
+MERGED from [org.lsposed.hiddenapibypass:hiddenapibypass:2.0] /home/ghost/.gradle/caches/transforms-3/8aecef6650e857bf3dd2da4b935e1a5e/transformed/jetified-hiddenapibypass-2.0/AndroidManifest.xml:5:5-7:41
+MERGED from [org.lsposed.hiddenapibypass:hiddenapibypass:2.0] /home/ghost/.gradle/caches/transforms-3/8aecef6650e857bf3dd2da4b935e1a5e/transformed/jetified-hiddenapibypass-2.0/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/ghost/.gradle/caches/transforms-3/3c3e063922a1aa016abb1c755f262297/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/ghost/.gradle/caches/transforms-3/3c3e063922a1aa016abb1c755f262297/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.2.4] /home/ghost/.gradle/caches/transforms-3/ad827a93fabaa2db0f977575a8c9e24f/transformed/jetified-activity-1.2.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.2.4] /home/ghost/.gradle/caches/transforms-3/ad827a93fabaa2db0f977575a8c9e24f/transformed/jetified-activity-1.2.4/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.1] /home/ghost/.gradle/caches/transforms-3/3202497f794f51a1668bedbf59af25fa/transformed/jetified-appcompat-resources-1.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.appcompat:appcompat-resources:1.3.1] /home/ghost/.gradle/caches/transforms-3/3202497f794f51a1668bedbf59af25fa/transformed/jetified-appcompat-resources-1.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/ghost/.gradle/caches/transforms-3/fae3606bf69e5569406a3c3737d5f362/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.0.0] /home/ghost/.gradle/caches/transforms-3/fae3606bf69e5569406a3c3737d5f362/transformed/drawerlayout-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/ghost/.gradle/caches/transforms-3/02e967905d35cb592904bab6bac97721/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/ghost/.gradle/caches/transforms-3/02e967905d35cb592904bab6bac97721/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/ghost/.gradle/caches/transforms-3/35d466ab8aca29bea7dc8e56c80e741c/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/ghost/.gradle/caches/transforms-3/35d466ab8aca29bea7dc8e56c80e741c/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/ghost/.gradle/caches/transforms-3/ea5b4de2f8683eac64b26b11c326d71f/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/ghost/.gradle/caches/transforms-3/ea5b4de2f8683eac64b26b11c326d71f/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/ghost/.gradle/caches/transforms-3/22760c16397a683b0f48cd538430f254/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/ghost/.gradle/caches/transforms-3/22760c16397a683b0f48cd538430f254/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.0.0] /home/ghost/.gradle/caches/transforms-3/cf3dbbe9f0f6eb4894c45f5eb649c086/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/ghost/.gradle/caches/transforms-3/cf3dbbe9f0f6eb4894c45f5eb649c086/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.7.0] /home/ghost/.gradle/caches/transforms-3/3337118a38029288edd53ff742d7a6e1/transformed/core-1.7.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.7.0] /home/ghost/.gradle/caches/transforms-3/3337118a38029288edd53ff742d7a6e1/transformed/core-1.7.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/ghost/.gradle/caches/transforms-3/6bc70adc13119291e5af9f60ab86bcc4/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/ghost/.gradle/caches/transforms-3/6bc70adc13119291e5af9f60ab86bcc4/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] /home/ghost/.gradle/caches/transforms-3/fe69e33aa4ec00ff5749c4c1f0c2bda5/transformed/jetified-lifecycle-viewmodel-savedstate-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1] /home/ghost/.gradle/caches/transforms-3/fe69e33aa4ec00ff5749c4c1f0c2bda5/transformed/jetified-lifecycle-viewmodel-savedstate-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] /home/ghost/.gradle/caches/transforms-3/c619a8634ec42d2c054f400227e90115/transformed/jetified-savedstate-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.savedstate:savedstate:1.1.0] /home/ghost/.gradle/caches/transforms-3/c619a8634ec42d2c054f400227e90115/transformed/jetified-savedstate-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /home/ghost/.gradle/caches/transforms-3/e5ccc677755abe9ca6e269a55ce50d2b/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /home/ghost/.gradle/caches/transforms-3/e5ccc677755abe9ca6e269a55ce50d2b/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] /home/ghost/.gradle/caches/transforms-3/bfe7b529144777b7ef8ef69a396ec06e/transformed/lifecycle-viewmodel-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.3.1] /home/ghost/.gradle/caches/transforms-3/bfe7b529144777b7ef8ef69a396ec06e/transformed/lifecycle-viewmodel-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [dev.rikka.shizuku:shared:11.0.2] /home/ghost/.gradle/caches/transforms-3/391fac1179a949daca3b63160152b0fe/transformed/jetified-shared-11.0.2/AndroidManifest.xml:7:5-9:41
+MERGED from [dev.rikka.shizuku:shared:11.0.2] /home/ghost/.gradle/caches/transforms-3/391fac1179a949daca3b63160152b0fe/transformed/jetified-shared-11.0.2/AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/ghost/.gradle/caches/transforms-3/1577bf7f5a28fa0282737394a7b457e1/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/ghost/.gradle/caches/transforms-3/1577bf7f5a28fa0282737394a7b457e1/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/ghost/.gradle/caches/transforms-3/8c4b36addbd349aa6cc33f49d72a59b7/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/ghost/.gradle/caches/transforms-3/8c4b36addbd349aa6cc33f49d72a59b7/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/ghost/.gradle/caches/transforms-3/7699daac6446d9795e4a8dce8f4a176c/transformed/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] /home/ghost/.gradle/caches/transforms-3/7699daac6446d9795e4a8dce8f4a176c/transformed/lifecycle-livedata-2.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] /home/ghost/.gradle/caches/transforms-3/e56a1af5824fa0c81de4a4e4820fe7cb/transformed/lifecycle-livedata-core-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.3.1] /home/ghost/.gradle/caches/transforms-3/e56a1af5824fa0c81de4a4e4820fe7cb/transformed/lifecycle-livedata-core-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/ghost/.gradle/caches/transforms-3/91b46d932ef03499d483b138acb5195a/transformed/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/ghost/.gradle/caches/transforms-3/91b46d932ef03499d483b138acb5195a/transformed/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/ghost/.gradle/caches/transforms-3/cc7f6ae153c315a33287d44cf4d1f1d5/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/ghost/.gradle/caches/transforms-3/cc7f6ae153c315a33287d44cf4d1f1d5/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [dev.rikka.shizuku:aidl:11.0.2] /home/ghost/.gradle/caches/transforms-3/5ab202f5d3759be1d00ec8ec8b946437/transformed/jetified-aidl-11.0.2/AndroidManifest.xml:7:5-9:41
+MERGED from [dev.rikka.shizuku:aidl:11.0.2] /home/ghost/.gradle/caches/transforms-3/5ab202f5d3759be1d00ec8ec8b946437/transformed/jetified-aidl-11.0.2/AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] /home/ghost/.gradle/caches/transforms-3/c4851004f571ab566112bfcfb56afe3a/transformed/jetified-annotation-experimental-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.1.0] /home/ghost/.gradle/caches/transforms-3/c4851004f571ab566112bfcfb56afe3a/transformed/jetified-annotation-experimental-1.1.0/AndroidManifest.xml:20:5-22:41
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		ADDED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+		INJECTED from /home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+uses-permission#moe.shizuku.manager.permission.API_V23
+ADDED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:12:5-78
+	android:name
+		ADDED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:12:22-75
+meta-data#moe.shizuku.client.V3_SUPPORT
+ADDED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:15:9-17:36
+	android:value
+		ADDED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:17:13-33
+	android:name
+		ADDED from [dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:16:13-57

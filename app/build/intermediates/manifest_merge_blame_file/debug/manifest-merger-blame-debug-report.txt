@@ -1,0 +1,103 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="site.zbyte.root.app"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="23"
+8-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="31" />
+9-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml
+10
+11    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+11-->[dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:12:5-78
+11-->[dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:12:22-75
+12
+13    <application
+13-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:5:5-45:19
+14        android:name="site.zbyte.root.app.App"
+14-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:6:9-28
+15        android:allowBackup="true"
+15-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:7:9-35
+16        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+16-->[androidx.core:core:1.7.0] /home/ghost/.gradle/caches/transforms-3/3337118a38029288edd53ff742d7a6e1/transformed/core-1.7.0/AndroidManifest.xml:24:18-86
+17        android:debuggable="true"
+18        android:extractNativeLibs="false"
+19        android:icon="@mipmap/ic_launcher"
+19-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:8:9-43
+20        android:label="@string/app_name"
+20-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:9:9-41
+21        android:roundIcon="@mipmap/ic_launcher_round"
+21-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:10:9-54
+22        android:supportsRtl="true"
+22-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:11:9-35
+23        android:testOnly="true"
+24        android:theme="@style/Theme.AppCompat" >
+24-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:12:9-47
+25        <activity
+25-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:13:9-21:20
+26            android:name="site.zbyte.root.app.MainActivity"
+26-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:14:13-41
+27            android:exported="true" >
+27-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:15:13-36
+28            <intent-filter>
+28-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:16:13-20:29
+29                <action android:name="android.intent.action.MAIN" />
+29-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:17:17-69
+29-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:17:25-66
+30
+31                <category android:name="android.intent.category.LAUNCHER" />
+31-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:19:17-77
+31-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:19:27-74
+32            </intent-filter>
+33        </activity>
+34
+35        <service
+35-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:23:9-35:19
+36            android:name="site.zbyte.root.app.AutoKillService"
+36-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:24:13-44
+37            android:exported="false"
+37-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:25:13-37
+38            android:label="测试的自动停用服务"
+38-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:26:13-38
+39            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+39-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:27:13-79
+40            <intent-filter>
+40-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:28:13-30:29
+41                <action android:name="android.accessibilityservice.AccessibilityService" />
+41-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:29:17-92
+41-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:29:25-89
+42            </intent-filter>
+43
+44            <meta-data
+44-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:32:13-34:57
+45                android:name="android.accessibilityservice"
+45-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:33:17-60
+46                android:resource="@xml/accessibility" />
+46-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:34:17-54
+47        </service>
+48
+49        <provider
+50            android:name="rikka.shizuku.ShizukuProvider"
+50-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:38:13-57
+51            android:authorities="site.zbyte.root.app.shizuku"
+51-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:39:13-59
+52            android:enabled="true"
+52-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:41:13-35
+53            android:exported="true"
+53-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:42:13-36
+54            android:multiprocess="false"
+54-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:40:13-41
+55            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+55-->/home/ghost/project/ZRoot/app/src/main/AndroidManifest.xml:43:13-79
+56
+57        <meta-data
+57-->[dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:15:9-17:36
+58            android:name="moe.shizuku.client.V3_SUPPORT"
+58-->[dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:16:13-57
+59            android:value="true" />
+59-->[dev.rikka.shizuku:provider:11.0.2] /home/ghost/.gradle/caches/transforms-3/c46d50eb5d516869ec2b7a15b8b102a9/transformed/jetified-provider-11.0.2/AndroidManifest.xml:17:13-33
+60    </application>
+61
+62</manifest>
