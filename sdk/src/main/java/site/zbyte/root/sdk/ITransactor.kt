@@ -10,7 +10,7 @@ interface ITransactor {
     /**
      * obtain一个parcel，并预处理要发送的数据结构
      */
-    fun obtain(origin:IBinder,originData:Parcel):Parcel
+    fun obtain(oBinder:IBinder,oCode:Int,oData:Parcel):Parcel
 
     /**
      * 完成自定义transact，一般是发送到指定远程进程
