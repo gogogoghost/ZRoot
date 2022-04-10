@@ -114,11 +114,14 @@ class ZRoot private constructor(private val remote: IRemote) {
                 output.write(
                     "$starterRealPath " +
                             "$dexRealPath " +
-                            context.packageName +
-                            "&&exit\n"
+                            context.packageName +"\n"
                 )
+                output.write("exit\n");
                 output.flush()
-                return process.waitFor() == 0
+                val res=process.waitFor()
+                if(res!=0)
+                    throw Exception("Result code not zero:$res")
+                return true
             } catch (e: Exception) {
                 e.printStackTrace()
                 return false
