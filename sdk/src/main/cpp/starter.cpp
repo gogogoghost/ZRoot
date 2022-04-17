@@ -1,7 +1,11 @@
 #include <dlfcn.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include "selinux.h"
+
+#define RES_BAD_ARGS 1
+#define RES_SELINUX_CONTEXT_DENIED 2
 
 #define PROCESS_NAME "rd_runner"
 
@@ -9,8 +13,7 @@
 int main(int argc,char* argv[]){
 
     if(argc!=3){
-        printf("args error!\n");
-        return -1;
+        exit(RES_BAD_ARGS);
     }
 
 
@@ -31,7 +34,7 @@ int main(int argc,char* argv[]){
         res |= se::check_selinux("u:r:untrusted_app:s0", context, "binder", "call");
         res |= se::check_selinux("u:r:untrusted_app:s0", context, "binder", "transfer");
         if(res!=0){
-            se::setcon("u:r:shell:s0");
+            exit(RES_SELINUX_CONTEXT_DENIED);
         }
         se::freecon(context);
     }
@@ -54,12 +57,13 @@ int main(int argc,char* argv[]){
         	const_cast<char *>(packageName),
         	nullptr
         };
+        printf("starting...\n");
         execvp(appProcessArgs[0], appProcessArgs);
     }else if(pid>0){
         //parent
         return 0;
     }else{
-        printf("fork error!\n");
+        perror("fork error!\n");
         return pid;
     }
 

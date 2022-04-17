@@ -28,6 +28,11 @@ public class Runner {
 
     private static IBinder clientWatcher = null;
 
+    private static final int ERR_UNKNOWN = -10;
+    private static final int ERR_WAIT_TIMEOUT = -1;
+    private static final int ERR_GET_PROVIDER = -2;
+    private static final int ERR_CALL_TIMEOUT = -3;
+
     /**
      * 获取服务
      */
@@ -44,7 +49,7 @@ public class Runner {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
-            System.exit(-1);
+            System.exit(ERR_UNKNOWN);
         }
     }
 
@@ -60,8 +65,10 @@ public class Runner {
                     sleep(1000);
                     i++;
                 }
-                if (i == 5)
-                    System.exit(-2);
+                if (i == 5){
+                    Log.w(TAG,"wait timeout");
+                    System.exit(ERR_WAIT_TIMEOUT);
+                }
             }
         }).start();
     }
@@ -85,7 +92,7 @@ public class Runner {
         IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
                 (IBinder) Class.forName(Config.RemoteClass).newInstance();
 
-        IBinder executor = new IRemote.Stub() {
+        IRemote executor = new IRemote.Stub() {
 
             @Override
             public void registerWatcher(IBinder binder) throws RemoteException {
@@ -159,37 +166,36 @@ public class Runner {
             }
         };
 
-
-        Intent intent = new Intent(packageName+".ZR_TRANSFER");
-        intent.setPackage(packageName);
-
         Bundle bundle = new Bundle();
-        bundle.putBinder("runner", executor);
+        bundle.putBinder("runner", executor.asBinder());
         bundle.putBinder("caller", null);
-        intent.putExtras(bundle);
 
+        String authority=packageName+".zroot";
+        IContentProvider provider;
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q)
+            provider=mAm.getContentProviderExternal(authority, 0, null, null).provider;
+        else
+            provider=mAm.getContentProviderExternal(authority, 0, null).provider;
 
-        int res=mAm.broadcastIntent(
-                null,
-                intent,
-                intent.getType(),
-                null,
-                0,
-                null,
-                null,
-                null,
-                //OP_NONE
-                -1,
-                null,
-                true,
-                false,
-                0
-        );
-        if(res!=0){
-            //Fail
-            Log.w(TAG,"broadcast fail with result:"+res);
-            System.exit(-2);
+        if(provider==null){
+            Log.w(TAG,"cannot get provider");
+            System.exit(ERR_GET_PROVIDER);
         }
+
+        try{
+            executor.callContentProvider(
+                    provider.asBinder(),
+                    "android",
+                    authority,
+                    "transfer",
+                    "",
+                    bundle
+            );
+        }catch (Exception e){
+            Log.w(TAG,e);
+            System.exit(ERR_CALL_TIMEOUT);
+        }
+
         checkStarted();
         Looper.loop();
     }

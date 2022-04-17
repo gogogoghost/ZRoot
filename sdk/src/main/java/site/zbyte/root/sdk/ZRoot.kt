@@ -10,37 +10,24 @@ class ZRoot private constructor(private val remote: IRemote) {
     class Starter(private val context: Context){
         private val handler = Handler(Looper.getMainLooper())
 
-        private val subThread = HandlerThread("runner")
-        private val subHandler: Handler
-
-        private var runnerReceiver: BroadcastReceiver? = null
-
         private val lock = Object()
 
-        init {
-            subThread.start()
-            subHandler= Handler(subThread.looper)
-        }
         /**
          * 启动receiver
          */
         private fun startReceiver(cb:(IRemote)->Unit) {
-            val filter = IntentFilter()
-            filter.addAction(context.packageName+".ZR_TRANSFER")
-            runnerReceiver = RunnerReceiver{
+            Provider.receiver={
                 val remote=IRemote.Stub.asInterface(it)
                 remote.registerWatcher(Binder())
                 cb(remote)
             }
-            //使用一个不存在的权限 以便通过non-protected broadcast check
-            context.registerReceiver(runnerReceiver, filter, "site.zbyte.root.permission.ZR_TRANSFER", subHandler)
         }
 
         /**
          * 注销receiver
          */
         private fun stopReceiver() {
-            context.unregisterReceiver(runnerReceiver)
+            Provider.receiver=null
         }
 
         /**
@@ -114,11 +101,14 @@ class ZRoot private constructor(private val remote: IRemote) {
                 output.write(
                     "$starterRealPath " +
                             "$dexRealPath " +
-                            context.packageName +
-                            "&&exit\n"
+                            context.packageName +"\n"
                 )
+                output.write("exit\n");
                 output.flush()
-                return process.waitFor() == 0
+                val res=process.waitFor()
+                if(res!=0)
+                    throw Exception("Result code not zero:$res")
+                return true
             } catch (e: Exception) {
                 e.printStackTrace()
                 return false
