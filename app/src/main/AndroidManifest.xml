@@ -41,6 +41,14 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+        
+        <provider
+            android:name="site.zbyte.root.sdk.Provider"
+            android:authorities="${applicationId}.zroot"
+            android:multiprocess="false"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="site.zbyte.root.permission.ZR_TRANSFER"/>
 
     </application>
 
