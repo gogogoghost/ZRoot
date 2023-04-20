@@ -66,7 +66,10 @@ localProperties.withInputStream { instr ->
 
 def sdkDir = properties.getProperty('sdk.dir')
 
-task copyRunner(type: Exec, dependsOn: ':runner:makeJar') {
+task copyRunner(type: Exec,dependsOn: ':runner:makeJar') {
+    doFirst {
+        new File(project.buildDir.path + '/assets').mkdirs()
+    }
     def buildToolVersion = project.extensions.findByName('android').getProperties()['buildToolsVersion']
     def dexFile = sdkDir + '/build-tools/' + buildToolVersion + '/dx' + (isWindows ? '.bat' : '')
 
@@ -84,7 +87,7 @@ task copyRunner(type: Exec, dependsOn: ':runner:makeJar') {
 
 tasks.whenTaskAdded { task ->
     if (task.name == 'generateDebugAssets' || task.name == 'generateReleaseAssets') {
-        task.dependsOn(['copyRunner'])
+        task.dependsOn('copyRunner')
     }
 }
 

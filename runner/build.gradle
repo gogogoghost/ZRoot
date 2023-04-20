@@ -39,4 +39,5 @@ task makeJar(type: Jar, dependsOn: ['removeLibs', 'syncReleaseLibJars']) {
             zipTree('build/intermediates/aar_main_jar/release/classes.jar')
     )
     exclude(['**/*/BuildConfig.class'])
+    archiveName("runner.jar")
 }
