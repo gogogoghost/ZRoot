@@ -80,10 +80,10 @@ class ZRoot private constructor(private val remote: IRemote) {
 
                 val dir = "/data/local/tmp/${context.packageName}.root-driver"
 
-                val dexTmpPath = context.externalCacheDir!!.absolutePath + "/runner.tmp"
+                val dexTmpPath = context.cacheDir!!.absolutePath + "/runner.tmp"
                 val dexRealPath = "${dir}/runner.dex"
 
-                val starterTmpPath = context.externalCacheDir!!.absolutePath + "/starter.tmp"
+                val starterTmpPath = context.cacheDir!!.absolutePath + "/starter.tmp"
                 val starterRealPath = "${dir}/starter"
 
 
