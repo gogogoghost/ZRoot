@@ -69,7 +69,7 @@ if(localProperties.exists()){
     }
     sdkDir = properties.getProperty('sdk.dir')
 }else{
-    sdkDir=System.getProperty("ANDROID_HOME")
+    sdkDir=System.getenv()['ANDROID_HOME']
 }
 
 task copyRunner(type: Exec,dependsOn: ':runner:makeJar') {

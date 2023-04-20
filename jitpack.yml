@@ -1,7 +1,7 @@
 jdk:
   - openjdk11
 before_install:
-  - sed "s/include ':app'//" settings.gradle
+  - sed -i "s/include ':app'\n//" settings.gradle
   - rm -rf app/
 install:
   - echo "Building zroot..."
