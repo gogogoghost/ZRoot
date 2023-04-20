@@ -223,7 +223,7 @@ class ZRoot private constructor(private val remote: IRemote) {
      * 自定义transact转发
      */
     class RootTransactor(private val zRoot:ZRoot):ITransactor{
-        override fun obtain(oBinder: IBinder,oCode:Int, oData: Parcel): Parcel {
+        override fun obtain(oBinder: IBinder,oCode:Int, oData: Parcel, flags:Int): Parcel {
             val dataProxy=Parcel.obtain()
             //先写入origin
             dataProxy.writeStrongBinder(oBinder)

@@ -20,7 +20,7 @@ class BinderProxy(private val origin: IBinder, private val transactor:ITransacto
         reply: Parcel?,
         flags: Int
     ): Boolean {
-        val dataProxy = transactor.obtain(origin,code,data)
+        val dataProxy = transactor.obtain(origin,code,data,flags)
         try {
             return transactor.transact(code, dataProxy, reply, flags)
         } catch (e: Exception) {
