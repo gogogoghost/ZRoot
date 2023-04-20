@@ -1,5 +1,8 @@
 jdk:
   - openjdk11
+before_install:
+  - sed "s/include ':app'//" settings.gradle
+  - rm -rf app/
 install:
   - echo "Building zroot..."
   - ./gradlew clean -Pgroup=$GROUP -Pversion=$VERSION -xtest -xlint :sdk:assemble :sdk:publishToMavenLocal

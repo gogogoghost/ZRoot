@@ -58,13 +58,19 @@ if (System.properties['os.name'].toLowerCase().contains('windows')) {
     isWindows = true
 }
 
-def localProperties = new File(project.rootDir, "local.properties")
-def properties = new Properties()
-localProperties.withInputStream { instr ->
-    properties.load(instr)
-}
+def sdkDir = ""
 
-def sdkDir = properties.getProperty('sdk.dir')
+def localProperties = new File(project.rootDir, "local.properties")
+
+if(localProperties.exists()){
+    def properties = new Properties()
+    localProperties.withInputStream { instr ->
+        properties.load(instr)
+    }
+    sdkDir = properties.getProperty('sdk.dir')
+}else{
+    sdkDir=System.getProperty("ANDROID_HOME")
+}
 
 task copyRunner(type: Exec,dependsOn: ':runner:makeJar') {
     doFirst {
