@@ -57,9 +57,5 @@ dependencies {
 
     compileOnly project(path: ':hidden_api')
 
-    def shizuku_version = '11.0.2'
-    implementation "dev.rikka.shizuku:api:$shizuku_version"
-    implementation "dev.rikka.shizuku:provider:$shizuku_version"
-
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:2.0'
 }
