@@ -90,7 +90,8 @@ public class Runner {
         Looper.prepareMainLooper();
 
         //创建类
-        IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
+        Log.i(TAG,"create worker:"+Config.RemoteClass);
+        final IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
                 (IBinder) Class.forName(Config.RemoteClass).newInstance();
 
         IRemote executor = new IRemote.Stub() {
