@@ -193,7 +193,7 @@ class ZRoot private constructor(private val remote: IRemote) {
     /**
      * 获取用户自定义远程worker
      */
-    fun getWorker(): IBinder {
+    fun getWorker(): IBinder? {
         return worker
     }
 
