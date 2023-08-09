@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 
 class Provider:ContentProvider() {
 
@@ -52,6 +53,10 @@ class Provider:ContentProvider() {
         authority: String, method: String,
         arg: String?, extras: Bundle?
     ): Bundle? {
+        return call(method, arg, extras)
+    }
+
+    override fun call(method: String, arg: String?, extras: Bundle?): Bundle? {
         if(method=="transfer"){
             receiver?.invoke(extras!!.getBinder("runner")!!)
             receiver=null

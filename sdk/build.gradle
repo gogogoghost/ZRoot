@@ -6,13 +6,11 @@ plugins {
 
 
 android {
-    compileSdkVersion 31
-
-    buildToolsVersion '30.0.3'
+    compileSdkVersion 34
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 31
+        minSdkVersion 25
+        targetSdkVersion 34
     }
 
     buildTypes {
@@ -39,13 +37,14 @@ android {
             assets.srcDirs = [buildDir.path + '/assets']
         }
     }
-    ndkVersion '22.0.7026061'
+    ndkVersion '25.0.8775105'
 
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
         }
     }
+    namespace 'site.zbyte.root.sdk'
 }
 
 dependencies {

@@ -215,8 +215,8 @@ class ZRoot private constructor(private val remote: IRemote) {
     /**
      * 调用远程去call ContentProvider
      */
-    fun callContentProvider(contentProvider:IBinder,packageName:String,authority:String,methodName:String,key:String,data:Bundle):Bundle?{
-        return remote.callContentProvider(contentProvider, packageName, authority, methodName, key, data)
+    fun callContentProvider(contentProvider:IBinder,packageName:String,authority:String,methodName:String,arg:String,data:Bundle):Bundle?{
+        return remote.callContentProvider(contentProvider, packageName, authority, methodName, arg, data)
     }
 
     /**

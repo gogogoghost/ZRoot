@@ -3,12 +3,15 @@ package site.zbyte.root.app
 import android.annotation.SuppressLint
 import android.app.ActivityManagerNative
 import android.app.IActivityManager
+import android.content.ContentResolver
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import site.zbyte.root.sdk.ZRoot
 import android.os.*
 import android.util.Log
 import android.widget.TextView
+import androidx.core.content.ContentResolverCompat
 
 class MainActivity : AppCompatActivity() {
 

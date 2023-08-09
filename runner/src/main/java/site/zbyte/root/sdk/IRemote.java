@@ -336,5 +336,5 @@ public interface IRemote extends android.os.IInterface
   public int getTransactCode(java.lang.String clsName, java.lang.String fieldName) throws android.os.RemoteException;
   //content provider专用call
 
-  public android.os.Bundle callContentProvider(android.os.IBinder contentProvider, java.lang.String packageName, java.lang.String authority, java.lang.String methodName, java.lang.String key, android.os.Bundle data) throws android.os.RemoteException;
+  public android.os.Bundle callContentProvider(android.os.IBinder contentProvider, java.lang.String packageName, java.lang.String authority, java.lang.String methodName, java.lang.String arg, android.os.Bundle data) throws android.os.RemoteException;
 }

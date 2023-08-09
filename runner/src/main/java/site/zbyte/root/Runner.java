@@ -2,6 +2,7 @@ package site.zbyte.root;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManagerNative;
+import android.app.ContentProviderHolder;
 import android.app.IActivityManager;
 import android.content.AttributionSource;
 import android.content.ContentProviderNative;
@@ -147,48 +148,58 @@ public class Runner {
 
             @Override
             public Bundle callContentProvider(IBinder contentProvider, String packageName,
-                                              String authority, String methodName, String key,
+                                              String authority, String methodName, String arg,
                                               Bundle data) throws RemoteException {
                 IContentProvider provider = ContentProviderNative.asInterface(contentProvider);
                 if (provider == null) return null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     AttributionSource.Builder builder = new AttributionSource.Builder(0);
                     builder.setPackageName(packageName);
-                    return provider.call(builder.build(), authority, methodName, key, data);
+                    return provider.call(builder.build(), authority, methodName, arg, data);
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    return provider.call(packageName, null, authority, methodName, key, data);
+                    return provider.call(packageName, null, authority, methodName, arg, data);
 
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    return provider.call(packageName, authority, methodName, key, data);
+                    return provider.call(packageName, authority, methodName, arg, data);
                 } else {
-                    return provider.call(packageName, methodName, key, data);
+                    return provider.call(packageName, methodName, arg, data);
                 }
             }
         };
 
         Bundle bundle = new Bundle();
         bundle.putBinder("runner", executor.asBinder());
-        bundle.putBinder("caller", null);
+//        bundle.putBinder("caller", null);
 
         String authority=packageName+".zroot";
-        IContentProvider provider;
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q)
-            provider=mAm.getContentProviderExternal(authority, 0, null, null).provider;
-        else
-            provider=mAm.getContentProviderExternal(authority, 0, null).provider;
-
-        if(provider==null){
-            Log.w(TAG,"cannot get provider");
+        IContentProvider provider=null;
+        try{
+            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+                ContentProviderHolder holder=mAm.getContentProviderExternal(authority, 0, null, null);
+                if(holder==null){
+                    throw new Exception("cannot get provider");
+                }
+                provider=holder.provider;
+            }
+            else{
+                IActivityManager.ContentProviderHolder holder =mAm.getContentProviderExternal(authority, 0, null);
+                if(holder==null){
+                    throw new Exception("cannot get provider");
+                }
+                provider=holder.provider;
+            }
+        }catch (Exception e){
+            Log.w(TAG,e.toString());
             System.exit(ERR_GET_PROVIDER);
         }
 
         try{
-            executor.callContentProvider(
+            Bundle res=executor.callContentProvider(
                     provider.asBinder(),
                     "android",
                     authority,
                     "transfer",
-                    "",
+                    null,
                     bundle
             );
         }catch (Exception e){

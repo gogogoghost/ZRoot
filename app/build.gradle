@@ -14,12 +14,12 @@ zRoot{
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "site.zbyte.root.app"
-        minSdkVersion 23
-        targetSdkVersion 33
+        minSdkVersion 25
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
 
@@ -44,6 +44,7 @@ android {
             assets.srcDirs = [buildDir.path+'/assets']
         }
     }
+    namespace 'site.zbyte.root.app'
 }
 
 dependencies {
