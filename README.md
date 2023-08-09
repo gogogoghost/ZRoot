@@ -38,6 +38,18 @@ dependencies {
 }
 ```
 
+Add content provider into Application tag of **AndroidManifest.xml**
+
+```xml
+<provider
+    android:name="site.zbyte.root.sdk.Provider"
+    android:authorities="${applicationId}.zroot"
+    android:multiprocess="false"
+    android:enabled="true"
+    android:exported="true"
+    android:permission="site.zbyte.root.permission.ZR_TRANSFER"/>
+```
+
 #### Start ZRoot
 
 ```kotlin
