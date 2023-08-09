@@ -11,7 +11,7 @@ buildscript {
         maven { url 'https://jitpack.io' }
         google()
         maven {
-            url uri(rootDir.path + '/builder/build/repo')
+            url uri(rootDir.path + '../ZRoot-Builder/build/repo')
         }
     }
     dependencies {
