@@ -1,5 +1,5 @@
 jdk:
-  - openjdk11
+  - openjdk17
 before_install:
   - sed -i "s/include ':app'\n//" settings.gradle
   - rm -rf app/
