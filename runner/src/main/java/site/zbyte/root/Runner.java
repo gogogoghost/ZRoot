@@ -1,13 +1,11 @@
 package site.zbyte.root;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManagerNative;
 import android.app.ContentProviderHolder;
 import android.app.IActivityManager;
 import android.content.AttributionSource;
 import android.content.ContentProviderNative;
 import android.content.IContentProvider;
-import android.content.Intent;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;

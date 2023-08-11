@@ -45,6 +45,9 @@ android {
         }
     }
     namespace 'site.zbyte.root.sdk'
+    buildFeatures {
+        aidl true
+    }
 }
 
 dependencies {
