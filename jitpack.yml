@@ -1,7 +1,7 @@
 jdk:
   - openjdk17
 before_install:
-  - sed -i "s/include ':app'\n//" settings.gradle
+  - sed -i "s/include ':app'\n//" settings.gradle.kts
   - rm -rf app/
 install:
   - echo "Building zroot..."
