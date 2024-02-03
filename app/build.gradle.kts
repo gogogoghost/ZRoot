@@ -64,5 +64,5 @@ dependencies {
 
     compileOnly(project(":hidden_api"))
 
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:2.0")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
 }

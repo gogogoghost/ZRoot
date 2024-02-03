@@ -28,7 +28,7 @@ plugins {
 
 buildscript{
     dependencies{
-        classpath("site.zbyte:zroot-builder:3.0.0")
+        classpath("site.zbyte:zroot-builder:3.1.0")
     }
 }
 

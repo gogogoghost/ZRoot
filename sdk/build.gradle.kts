@@ -1,5 +1,6 @@
 import java.util.Properties
 import java.io.FileInputStream
+import java.util.Locale
 
 plugins {
     id("com.android.library")
@@ -13,7 +14,9 @@ android {
 
     defaultConfig {
         minSdk = 25
-        targetSdk = 34
+        lint{
+            targetSdk = 34
+        }
     }
 
     buildTypes {
@@ -58,40 +61,40 @@ dependencies {
 }
 
 var isWindows = false
-if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+if (System.getProperty("os.name").lowercase(Locale.getDefault()).contains("windows")) {
     isWindows = true
 }
 
-var sdkDir:String? = ""
-
 val localProperties = File(project.rootDir, "local.properties")
 
-if(localProperties.exists()){
+val sdkDir = if(localProperties.exists()){
     val properties = Properties()
     properties.load(FileInputStream(localProperties))
-    sdkDir = properties.getProperty("sdk.dir")
+    properties.getProperty("sdk.dir")
 }else{
-    sdkDir=System.getenv()["ANDROID_HOME"]
+    System.getenv()["ANDROID_HOME"]
 }
 
-tasks.register<Exec>("copyRunner") {
+val buildToolVersion = android.buildToolsVersion
+
+tasks.register<Exec>("compileRunner"){
     dependsOn(":runner:makeJar")
-    doFirst {
-        File(project.buildDir.path + "/assets").mkdirs()
-    }
-    val buildToolVersion = android.buildToolsVersion
-    val dexFile = sdkDir + "/build-tools/" + buildToolVersion + "/dx" + (if (isWindows)".bat" else "")
-
+    val d8File=sdkDir + "/build-tools/" + buildToolVersion + "/d8" + (if (isWindows)".bat" else "")
     val srcFile = rootDir.path + "/runner/build/libs/runner.jar"
-    val outFile = project.buildDir.path + "/assets/runner.dex"
+    val outDir=rootDir.path + "/runner/build/libs/"
 
-    val assetsDir = File(outFile).parentFile
-    if (!assetsDir.exists()) {
-        assetsDir.mkdirs()
+    executable(d8File)
+    args(arrayOf("--release","--output",outDir,srcFile))
+}
+
+tasks.register<Copy>("copyRunner") {
+    mustRunAfter("compileRunner")
+    doFirst {
+        File(buildDir.path + "/assets").mkdirs()
     }
-
-    executable(dexFile)
-    args(arrayOf<String>("--dex", "--output", outFile, srcFile))
+    from(rootDir.path + "/runner/build/libs/classes.dex")
+    into(buildDir.path+"assets/")
+    rename("classes.dex","runner.dex")
 }
 
 tasks.configureEach {

@@ -4,6 +4,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://jitpack.io")
+        mavenLocal()
     }
 }
 dependencyResolutionManagement {
