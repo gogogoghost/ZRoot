@@ -28,6 +28,8 @@ public interface IActivityManager {
     public ParceledListSlice getRecentTasks(int maxNum, int flags, int userId);
 
 
+    void registerProcessObserver(IProcessObserver observer);
+
     /**
      * 7.0+需要传isMonkey
      */

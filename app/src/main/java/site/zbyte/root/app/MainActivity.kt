@@ -2,8 +2,10 @@ package site.zbyte.root.app
 
 import android.annotation.SuppressLint
 import android.app.ActivityManagerNative
+import android.app.Application
 import android.app.IActivityManager
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,8 @@ import android.os.*
 import android.util.Log
 import android.widget.TextView
 import androidx.core.content.ContentResolverCompat
+import site.zbyte.root.sdk.Starter
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,10 +29,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val textView = findViewById<TextView>(R.id.text)
 
-        ZRoot.Starter(this).start(5000) {zRoot->
-            //start fail
-            if (zRoot==null)
-                return@start
+        thread {
+            val zRoot= (application as App).zRoot ?: return@thread
 
             /**
              * get custom remote worker
@@ -38,12 +40,12 @@ class MainActivity : AppCompatActivity() {
             /**
              * invoke remote method
              */
-            val msg = worker.work()
-            val content = "Message from remote: $msg"
-            Log.i(TAG, content)
-            textView.apply {
-                text = "$text\n$content"
+            runOnUiThread{
+                textView.apply {
+                    text = "$text\n"+"Message from remote: ${worker.work()}"
+                }
             }
+
             /**
              * get default remote service
              */
@@ -118,6 +120,18 @@ class MainActivity : AppCompatActivity() {
                 IActivityManager.Stub.asInterface(proxyBinder)
             else
                 ActivityManagerNative.asInterface(proxyBinder)
+
+            /**
+             * create a shell process
+             */
+            val shellZRoot=zRoot.forkBlocked(this,2000,5000)?:return@thread
+            val shellWorker = IWorker.Stub.asInterface(shellZRoot.getWorker())
+            runOnUiThread{
+                textView.apply {
+                    text = "$text\n"+"Message from remote: ${shellWorker.work()}"
+                }
+            }
         }
+
     }
 }

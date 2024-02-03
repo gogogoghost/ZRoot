@@ -3,6 +3,7 @@ package site.zbyte.root;
 import android.app.ActivityManagerNative;
 import android.app.ContentProviderHolder;
 import android.app.IActivityManager;
+import android.app.IProcessObserver;
 import android.content.AttributionSource;
 import android.content.ContentProviderNative;
 import android.content.IContentProvider;
@@ -12,10 +13,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Parcel;
+import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import site.zbyte.root.sdk.IRemote;
@@ -31,6 +34,7 @@ public class Runner {
     private static final int ERR_WAIT_TIMEOUT = -1;
     private static final int ERR_GET_PROVIDER = -2;
     private static final int ERR_CALL_TIMEOUT = -3;
+    private static final int ERR_GET_AMS = -4;
 
     /**
      * 获取服务
@@ -73,10 +77,15 @@ public class Runner {
     }
 
     private void run(String[] args) throws Exception {
-        if (args.length != 1) {
+        if (args.length != 3) {
             throw new Exception("Bad args");
         }
-        String packageName = args[0];
+        String starterPath = args[0];
+        String dexPath = args[1];
+        String packageName = args[2];
+
+        Looper.prepareMainLooper();
+
         IActivityManager mAm;
         IBinder activityRaw = getService("activity");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -84,8 +93,10 @@ public class Runner {
         } else {
             mAm = ActivityManagerNative.asInterface(activityRaw);
         }
-
-        Looper.prepareMainLooper();
+        if(mAm==null){
+            System.exit(ERR_GET_AMS);
+        }
+//        Log.i(TAG,"args:"+starterPath+" "+dexPath+" "+packageName+" "+Process.myUid());
 
         //创建类
         Log.i(TAG,"create worker:"+Config.RemoteClass);
@@ -97,7 +108,7 @@ public class Runner {
             @Override
             public void registerWatcher(IBinder binder) throws RemoteException {
                 clientWatcher = binder;
-                //开始工作
+                //开始工作 注册死亡回调
                 binder.linkToDeath(new IBinder.DeathRecipient() {
                     @Override
                     public void binderDied() {
@@ -122,8 +133,6 @@ public class Runner {
                             //写入数据
                             remoteData.appendFrom(data, data.dataPosition(), data.dataAvail());
                             service.transact(code, remoteData, reply, 0);
-                        } catch (Exception e) {
-                            throw e;
                         } finally {
                             remoteData.recycle();
                         }
@@ -152,7 +161,7 @@ public class Runner {
                 IContentProvider provider = ContentProviderNative.asInterface(contentProvider);
                 if (provider == null) return null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    AttributionSource.Builder builder = new AttributionSource.Builder(0);
+                    AttributionSource.Builder builder = new AttributionSource.Builder(Process.myUid());
                     builder.setPackageName(packageName);
                     return provider.call(builder.build(), authority, methodName, arg, data);
                 } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -163,6 +172,21 @@ public class Runner {
                 } else {
                     return provider.call(packageName, methodName, arg, data);
                 }
+            }
+
+            @Override
+            public int forkProcess(int uid) throws RemoteException {
+                try {
+                    return Runtime.getRuntime().exec(starterPath+" "+dexPath+" "+packageName+" "+uid).waitFor();
+                } catch (Exception e) {
+                    Log.e(TAG,"start error"+e);
+                    throw new RemoteException(e.toString());
+                }
+            }
+
+            @Override
+            public int getUid() throws RemoteException {
+                return Process.myUid();
             }
         };
 

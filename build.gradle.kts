@@ -35,14 +35,3 @@ buildscript{
 tasks.register<Delete>("clean") {
     delete(rootProject.buildDir)
 }
-
-tasks.register<Copy>("copySDK") {
-    dependsOn(":sdk:bundleReleaseAar")
-    from(rootDir.path + "/sdk/build/outputs/aar/root-driver-release.aar")
-    into(rootDir.path + "/build")
-    rename("root-driver-release.aar", "root-driver.aar")
-}
-
-tasks.register("export") {
-    dependsOn("copySDK")
-}

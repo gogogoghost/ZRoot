@@ -14,4 +14,8 @@ interface IRemote {
     int getTransactCode(String clsName,String fieldName);
     //content provider专用call
     Bundle callContentProvider(IBinder contentProvider,String packageName,String authority,String methodName,String key,in Bundle data);
+    //start new remote process
+    int forkProcess(int uid);
+    //获取当前进程uid
+    int getUid();
 }

@@ -25,7 +25,7 @@
             android:multiprocess="false"
             android:enabled="true"
             android:exported="true"
-            android:permission="site.zbyte.root.permission.ZR_TRANSFER"/>
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 
     </application>
 
