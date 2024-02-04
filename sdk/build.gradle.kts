@@ -84,16 +84,16 @@ tasks.register<Exec>("compileRunner"){
     val outDir=rootDir.path + "/runner/build/libs/"
 
     executable(d8File)
-    args(arrayOf("--release","--output",outDir,srcFile))
+    args("--release","--output",outDir,srcFile)
 }
 
 tasks.register<Copy>("copyRunner") {
-    mustRunAfter("compileRunner")
+    dependsOn("compileRunner")
     doFirst {
         File(buildDir.path + "/assets").mkdirs()
     }
     from(rootDir.path + "/runner/build/libs/classes.dex")
-    into(buildDir.path+"assets/")
+    into(buildDir.path+"/assets/")
     rename("classes.dex","runner.dex")
 }
 
