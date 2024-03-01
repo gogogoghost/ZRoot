@@ -10,8 +10,7 @@ import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 import java.util.zip.ZipFile
 
-class Starter(private val context: Context){
-//    private val handler = Handler(Looper.getMainLooper())
+class Starter(private val context: Context,private val startupUid:Int=0){
 
     private val lock = Object()
 
@@ -104,7 +103,9 @@ class Starter(private val context: Context){
             output.write(
                 "$starterRealPath " +
                         "$dexRealPath " +
-                        context.packageName +"\n"
+                        "${context.packageName} "+
+                        startupUid+
+                        "\n"
             )
             output.write("exit\n");
             output.flush()

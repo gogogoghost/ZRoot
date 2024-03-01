@@ -13,7 +13,7 @@ class App:Application() {
     override fun onCreate() {
         super.onCreate()
 
-        zRoot=Starter(this).startBlocked(5000)
+        zRoot=Starter(this,0).startBlocked(5000)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             HiddenApiBypass.addHiddenApiExemptions("");

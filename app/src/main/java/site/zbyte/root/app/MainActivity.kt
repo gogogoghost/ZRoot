@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("value", "1")
             zRoot.callContentProvider(
                 provider.asBinder(),
-                "android",
+                "com.android.shell",
                 authority,
                 "PUT_secure",
                 "accessibility_enabled",
@@ -124,11 +124,13 @@ class MainActivity : AppCompatActivity() {
             /**
              * create a shell process
              */
-            val shellZRoot=zRoot.forkBlocked(this,2000,5000)?:return@thread
-            val shellWorker = IWorker.Stub.asInterface(shellZRoot.getWorker())
-            runOnUiThread{
-                textView.apply {
-                    text = "$text\n"+"Message from remote: ${shellWorker.work()}"
+            if(zRoot.getUid()==0){
+                val shellZRoot=zRoot.forkBlocked(this,2000,5000)?:return@thread
+                val shellWorker = IWorker.Stub.asInterface(shellZRoot.getWorker())
+                runOnUiThread{
+                    textView.apply {
+                        text = "$text\n"+"Message from remote: ${shellWorker.work()}"
+                    }
                 }
             }
         }
