@@ -47,7 +47,7 @@ Add content provider into Application tag of **AndroidManifest.xml**
     android:multiprocess="false"
     android:enabled="true"
     android:exported="true"
-    android:permission="site.zbyte.root.permission.ZR_TRANSFER"/>
+    android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"/>
 ```
 
 #### Start ZRoot
@@ -56,14 +56,15 @@ Add content provider into Application tag of **AndroidManifest.xml**
 /**
  * start by blocked api with 5000ms timeout
  */
-val zRoot = ZRoot.Starter(context).startBlock(5000)
-
-/**
- * start by async api with 5000ms timeout
- */
-ZRoot.Starter(context).start(5000) { zRoot ->
-    //use zRoot
-}
+val zRoot = Starter(
+        //context
+        ctx,
+        //remote process uid: 0 for root or 2000 for shell
+        0
+).startBlocked(
+        //timeout
+        5000
+)
 ```
 
 #### Call system service
