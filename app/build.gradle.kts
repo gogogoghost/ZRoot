@@ -6,18 +6,18 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("zroot-builder")
+//    id("zroot-builder")
 }
 
-zRoot{
-    filter(
-        arrayListOf(
-            "site/zbyte/root/app/remote/.*",
-            "site/zbyte/root/app/IWorker.*"
-        ))
-    mainClass("site.zbyte.root.app.remote.Worker")
-    debug(":runner")
-}
+//zRoot{
+//    filter(
+//        arrayListOf(
+//            "site/zbyte/root/app/remote/.*",
+//            "site/zbyte/root/app/IWorker.*"
+//        ))
+//    mainClass("site.zbyte.root.app.remote.Worker")
+//    debug(":runner")
+//}
 
 android {
     compileSdk = 34

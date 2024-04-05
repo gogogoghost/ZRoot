@@ -3,7 +3,6 @@ package site.zbyte.root;
 import android.app.ActivityManagerNative;
 import android.app.ContentProviderHolder;
 import android.app.IActivityManager;
-import android.app.IProcessObserver;
 import android.content.AttributionSource;
 import android.content.ContentProviderNative;
 import android.content.IContentProvider;
@@ -18,8 +17,9 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
 import site.zbyte.root.sdk.IRemote;
 
@@ -123,20 +123,16 @@ public class Runner {
             }
 
             @Override
-            public IBinder getCaller() throws RemoteException {
+            public IBinder obtainBinderProxy(IBinder src) throws RemoteException {
+                if(src==null){
+                    throw new RemoteException("Origin binder could not be null");
+                }
+                Log.d(TAG,"createBinder");
                 return new Binder() {
                     @Override
-                    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
-                        IBinder service = data.readStrongBinder();
-                        Parcel remoteData = Parcel.obtain();
-                        try {
-                            //写入数据
-                            remoteData.appendFrom(data, data.dataPosition(), data.dataAvail());
-                            service.transact(code, remoteData, reply, 0);
-                        } finally {
-                            remoteData.recycle();
-                        }
-                        return true;
+                    public boolean onTransact(int code,Parcel data, Parcel reply, int flags) throws RemoteException {
+                        Log.d(TAG,"call:"+code);
+                        return src.transact(code, data, reply, flags);
                     }
                 };
             }

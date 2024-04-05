@@ -32,17 +32,9 @@ class MainActivity : AppCompatActivity() {
         thread {
             val zRoot= (application as App).zRoot ?: return@thread
 
-            /**
-             * get custom remote worker
-             */
-            val worker = IWorker.Stub.asInterface(zRoot.getWorker())
-
-            /**
-             * invoke remote method
-             */
             runOnUiThread{
                 textView.apply {
-                    text = "$text\n"+"Message from remote: ${worker.work()}"
+                    text = "$text\n"+"Message from remote: ${zRoot.getUid()}"
                 }
             }
 
@@ -50,6 +42,7 @@ class MainActivity : AppCompatActivity() {
              * get default remote service
              */
             val remoteService = zRoot.getRemoteService("activity")
+            println("remote:$remoteService")
 
             /**
              * convert to IActivityManager
@@ -126,10 +119,9 @@ class MainActivity : AppCompatActivity() {
              */
             if(zRoot.getUid()==0){
                 val shellZRoot=zRoot.forkBlocked(this,2000,5000)?:return@thread
-                val shellWorker = IWorker.Stub.asInterface(shellZRoot.getWorker())
                 runOnUiThread{
                     textView.apply {
-                        text = "$text\n"+"Message from remote: ${shellWorker.work()}"
+                        text = "$text\n"+"Message from remote: ${shellZRoot.getUid()}"
                     }
                 }
             }

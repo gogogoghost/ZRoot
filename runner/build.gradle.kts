@@ -40,7 +40,7 @@ tasks.register<Delete>("removeLibs") {
 tasks.register<Jar>("makeJar") {
     dependsOn("removeLibs", "syncReleaseLibJars")
     from(
-            zipTree("build/intermediates/aar_main_jar/release/classes.jar")
+            zipTree("build/intermediates/aar_main_jar/release/syncReleaseLibJars/classes.jar")
     )
     exclude("**/*/BuildConfig.class")
     archiveFileName = "runner.jar"

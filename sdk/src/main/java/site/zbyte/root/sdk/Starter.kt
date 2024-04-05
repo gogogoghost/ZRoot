@@ -3,8 +3,6 @@ package site.zbyte.root.sdk
 import android.content.Context
 import android.os.Binder
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter

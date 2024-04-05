@@ -6,8 +6,6 @@ import android.os.*
 class ZRoot(private val remote: IRemote) {
 
     private var worker=remote.worker
-    private var caller=remote.caller
-    private val transactor=RootTransactor(this)
 
     private var deadCallback: (() -> Unit)? = null
 
@@ -42,15 +40,14 @@ class ZRoot(private val remote: IRemote) {
      * 获取一个代理的ServiceManager中的服务binder
      */
     fun getRemoteService(name: String): IBinder {
-        val service = ServiceManager.getService(name)
-        return BinderProxy(service,transactor)
+        return remote.obtainBinderProxy(ServiceManager.getService(name))
     }
 
     /**
      * 获取一个自定义binder的root代理
      */
     fun makeBinderProxy(origin:IBinder):IBinder{
-        return BinderProxy(origin,transactor)
+        return remote.obtainBinderProxy(origin)
     }
 
     /**
@@ -70,24 +67,6 @@ class ZRoot(private val remote: IRemote) {
         val starter=Starter(context)
         return starter.startBlocked(timeout){
             remote.forkProcess(uid)==0
-        }
-    }
-
-    /**
-     * 自定义transact转发
-     */
-    class RootTransactor(private val zRoot:ZRoot):ITransactor{
-        override fun obtain(oBinder: IBinder,oCode:Int, oData: Parcel, flags:Int): Parcel {
-            val dataProxy=Parcel.obtain()
-            //先写入origin
-            dataProxy.writeStrongBinder(oBinder)
-            //再写入data
-            dataProxy.appendFrom(oData, 0, oData.dataSize())
-            return dataProxy
-        }
-
-        override fun transact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
-            return zRoot.caller.transact(code, data, reply, flags)
         }
     }
 }

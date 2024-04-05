@@ -17,8 +17,8 @@ public interface IRemote extends android.os.IInterface
     {
       return null;
     }
-    //获取Caller 专门接收transact的
-    @Override public android.os.IBinder getCaller() throws android.os.RemoteException
+    //将binder发到远程返回一个代理
+    @Override public android.os.IBinder obtainBinderProxy(android.os.IBinder src) throws android.os.RemoteException
     {
       return null;
     }
@@ -105,9 +105,11 @@ public interface IRemote extends android.os.IInterface
           reply.writeStrongBinder(_result);
           break;
         }
-        case TRANSACTION_getCaller:
+        case TRANSACTION_obtainBinderProxy:
         {
-          android.os.IBinder _result = this.getCaller();
+          android.os.IBinder _arg0;
+          _arg0 = data.readStrongBinder();
+          android.os.IBinder _result = this.obtainBinderProxy(_arg0);
           reply.writeNoException();
           reply.writeStrongBinder(_result);
           break;
@@ -214,15 +216,16 @@ public interface IRemote extends android.os.IInterface
         }
         return _result;
       }
-      //获取Caller 专门接收transact的
-      @Override public android.os.IBinder getCaller() throws android.os.RemoteException
+      //将binder发到远程返回一个代理
+      @Override public android.os.IBinder obtainBinderProxy(android.os.IBinder src) throws android.os.RemoteException
       {
         android.os.Parcel _data = android.os.Parcel.obtain();
         android.os.Parcel _reply = android.os.Parcel.obtain();
         android.os.IBinder _result;
         try {
           _data.writeInterfaceToken(DESCRIPTOR);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_getCaller, _data, _reply, 0);
+          _data.writeStrongBinder(src);
+          boolean _status = mRemote.transact(Stub.TRANSACTION_obtainBinderProxy, _data, _reply, 0);
           _reply.readException();
           _result = _reply.readStrongBinder();
         }
@@ -316,7 +319,7 @@ public interface IRemote extends android.os.IInterface
     }
     static final int TRANSACTION_registerWatcher = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
     static final int TRANSACTION_getWorker = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
-    static final int TRANSACTION_getCaller = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
+    static final int TRANSACTION_obtainBinderProxy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
     static final int TRANSACTION_getTransactCode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
     static final int TRANSACTION_callContentProvider = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
     static final int TRANSACTION_forkProcess = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
@@ -327,8 +330,8 @@ public interface IRemote extends android.os.IInterface
   public void registerWatcher(android.os.IBinder binder) throws android.os.RemoteException;
   //获取worker
   public android.os.IBinder getWorker() throws android.os.RemoteException;
-  //获取Caller 专门接收transact的
-  public android.os.IBinder getCaller() throws android.os.RemoteException;
+  //将binder发到远程返回一个代理
+  public android.os.IBinder obtainBinderProxy(android.os.IBinder src) throws android.os.RemoteException;
   //获取transact code
   public int getTransactCode(java.lang.String clsName, java.lang.String fieldName) throws android.os.RemoteException;
   //content provider专用call

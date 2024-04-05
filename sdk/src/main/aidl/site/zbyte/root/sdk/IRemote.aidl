@@ -8,8 +8,8 @@ interface IRemote {
     void registerWatcher(IBinder binder);
     //获取worker
     IBinder getWorker();
-    //获取Caller 专门接收transact的
-    IBinder getCaller();
+    //将binder发到远程返回一个代理
+    IBinder obtainBinderProxy(IBinder src);
     //获取transact code
     int getTransactCode(String clsName,String fieldName);
     //content provider专用call
