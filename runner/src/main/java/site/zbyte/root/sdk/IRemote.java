@@ -27,11 +27,6 @@ public interface IRemote extends android.os.IInterface
     {
       return 0;
     }
-    //content provider专用call
-    @Override public android.os.Bundle callContentProvider(android.os.IBinder contentProvider, java.lang.String packageName, java.lang.String authority, java.lang.String methodName, java.lang.String key, android.os.Bundle data) throws android.os.RemoteException
-    {
-      return null;
-    }
     //start new remote process
     @Override public int forkProcess(int uid) throws android.os.RemoteException
     {
@@ -123,25 +118,6 @@ public interface IRemote extends android.os.IInterface
           int _result = this.getTransactCode(_arg0, _arg1);
           reply.writeNoException();
           reply.writeInt(_result);
-          break;
-        }
-        case TRANSACTION_callContentProvider:
-        {
-          android.os.IBinder _arg0;
-          _arg0 = data.readStrongBinder();
-          java.lang.String _arg1;
-          _arg1 = data.readString();
-          java.lang.String _arg2;
-          _arg2 = data.readString();
-          java.lang.String _arg3;
-          _arg3 = data.readString();
-          java.lang.String _arg4;
-          _arg4 = data.readString();
-          android.os.Bundle _arg5;
-          _arg5 = _Parcel.readTypedObject(data, android.os.Bundle.CREATOR);
-          android.os.Bundle _result = this.callContentProvider(_arg0, _arg1, _arg2, _arg3, _arg4, _arg5);
-          reply.writeNoException();
-          _Parcel.writeTypedObject(reply, _result, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
           break;
         }
         case TRANSACTION_forkProcess:
@@ -255,30 +231,6 @@ public interface IRemote extends android.os.IInterface
         }
         return _result;
       }
-      //content provider专用call
-      @Override public android.os.Bundle callContentProvider(android.os.IBinder contentProvider, java.lang.String packageName, java.lang.String authority, java.lang.String methodName, java.lang.String key, android.os.Bundle data) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        android.os.Bundle _result;
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeStrongBinder(contentProvider);
-          _data.writeString(packageName);
-          _data.writeString(authority);
-          _data.writeString(methodName);
-          _data.writeString(key);
-          _Parcel.writeTypedObject(_data, data, 0);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_callContentProvider, _data, _reply, 0);
-          _reply.readException();
-          _result = _Parcel.readTypedObject(_reply, android.os.Bundle.CREATOR);
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-        return _result;
-      }
       //start new remote process
       @Override public int forkProcess(int uid) throws android.os.RemoteException
       {
@@ -321,9 +273,8 @@ public interface IRemote extends android.os.IInterface
     static final int TRANSACTION_getWorker = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
     static final int TRANSACTION_obtainBinderProxy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
     static final int TRANSACTION_getTransactCode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
-    static final int TRANSACTION_callContentProvider = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
-    static final int TRANSACTION_forkProcess = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
-    static final int TRANSACTION_getUid = (android.os.IBinder.FIRST_CALL_TRANSACTION + 6);
+    static final int TRANSACTION_forkProcess = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
+    static final int TRANSACTION_getUid = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
   }
   public static final java.lang.String DESCRIPTOR = "site.zbyte.root.sdk.IRemote";
   //注册一个watcher 用来跟踪app是否死亡 然后runner退出
@@ -334,31 +285,8 @@ public interface IRemote extends android.os.IInterface
   public android.os.IBinder obtainBinderProxy(android.os.IBinder src) throws android.os.RemoteException;
   //获取transact code
   public int getTransactCode(java.lang.String clsName, java.lang.String fieldName) throws android.os.RemoteException;
-  //content provider专用call
-  public android.os.Bundle callContentProvider(android.os.IBinder contentProvider, java.lang.String packageName, java.lang.String authority, java.lang.String methodName, java.lang.String key, android.os.Bundle data) throws android.os.RemoteException;
   //start new remote process
   public int forkProcess(int uid) throws android.os.RemoteException;
   //获取当前进程uid
   public int getUid() throws android.os.RemoteException;
-  /** @hide */
-  static class _Parcel {
-    static private <T> T readTypedObject(
-        android.os.Parcel parcel,
-        android.os.Parcelable.Creator<T> c) {
-      if (parcel.readInt() != 0) {
-          return c.createFromParcel(parcel);
-      } else {
-          return null;
-      }
-    }
-    static private <T extends android.os.Parcelable> void writeTypedObject(
-        android.os.Parcel parcel, T value, int parcelableFlags) {
-      if (value != null) {
-        parcel.writeInt(1);
-        value.writeToParcel(parcel, parcelableFlags);
-      } else {
-        parcel.writeInt(0);
-      }
-    }
-  }
 }

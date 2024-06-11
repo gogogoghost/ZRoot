@@ -2,19 +2,13 @@ package site.zbyte.root.app
 
 import android.annotation.SuppressLint
 import android.app.ActivityManagerNative
-import android.app.Application
 import android.app.IActivityManager
-import android.content.ContentResolver
-import android.content.Context
+import android.content.AttributionSource
+import android.content.ContentProviderNative
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
-import site.zbyte.root.sdk.ZRoot
 import android.os.*
-import android.util.Log
 import android.widget.TextView
-import androidx.core.content.ContentResolverCompat
-import site.zbyte.root.sdk.Starter
+import androidx.appcompat.app.AppCompatActivity
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -88,14 +82,27 @@ class MainActivity : AppCompatActivity() {
              */
             val bundle = Bundle()
             bundle.putString("value", "1")
-            zRoot.callContentProvider(
-                provider.asBinder(),
-                "com.android.shell",
-                authority,
-                "PUT_secure",
-                "accessibility_enabled",
-                bundle
+
+            /**
+             * call proxies content provider
+             */
+            val remoteProvider=ContentProviderNative.asInterface(
+                zRoot.makeBinderProxy(provider.asBinder())
             )
+            val methodName="PUT_secure"
+            val arg="accessibility_enabled"
+            val callerPkgName="com.android.shell"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val builder = AttributionSource.Builder(Process.myUid())
+                builder.setPackageName(callerPkgName)
+                remoteProvider.call(builder.build(), authority, methodName, arg, bundle)
+            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+                remoteProvider.call(callerPkgName, null, authority, methodName, arg, bundle)
+            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+                remoteProvider.call(callerPkgName, authority, methodName, arg, bundle)
+            } else {
+                remoteProvider.call(callerPkgName, methodName, arg, bundle)
+            }
 
             /**
              * proxy an existing local binder

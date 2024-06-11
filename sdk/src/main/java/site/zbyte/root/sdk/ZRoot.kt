@@ -51,13 +51,6 @@ class ZRoot(private val remote: IRemote) {
     }
 
     /**
-     * 调用远程去call ContentProvider
-     */
-    fun callContentProvider(contentProvider:IBinder,packageName:String,authority:String,methodName:String,arg:String,data:Bundle):Bundle?{
-        return remote.callContentProvider(contentProvider, packageName, authority, methodName, arg, data)
-    }
-
-    /**
      * 经过远程对象创建一个新进程 同步
      */
     fun forkBlocked(context: Context, uid:Int,timeout:Long):ZRoot?{

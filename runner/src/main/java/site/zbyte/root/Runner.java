@@ -57,6 +57,28 @@ public class Runner {
     }
 
     /**
+     * call content provider
+     */
+    public Bundle callContentProvider(IBinder contentProvider, String packageName,
+                                      String authority, String methodName, String arg,
+                                      Bundle data) throws RemoteException {
+        IContentProvider provider = ContentProviderNative.asInterface(contentProvider);
+        if (provider == null) return null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AttributionSource.Builder builder = new AttributionSource.Builder(Process.myUid());
+            builder.setPackageName(packageName);
+            return provider.call(builder.build(), authority, methodName, arg, data);
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+            return provider.call(packageName, null, authority, methodName, arg, data);
+
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+            return provider.call(packageName, authority, methodName, arg, data);
+        } else {
+            return provider.call(packageName, methodName, arg, data);
+        }
+    }
+
+    /**
      * 检查启动成功与否
      */
     private static void checkStarted() {
@@ -151,26 +173,6 @@ public class Runner {
             }
 
             @Override
-            public Bundle callContentProvider(IBinder contentProvider, String packageName,
-                                              String authority, String methodName, String arg,
-                                              Bundle data) throws RemoteException {
-                IContentProvider provider = ContentProviderNative.asInterface(contentProvider);
-                if (provider == null) return null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    AttributionSource.Builder builder = new AttributionSource.Builder(Process.myUid());
-                    builder.setPackageName(packageName);
-                    return provider.call(builder.build(), authority, methodName, arg, data);
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    return provider.call(packageName, null, authority, methodName, arg, data);
-
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    return provider.call(packageName, authority, methodName, arg, data);
-                } else {
-                    return provider.call(packageName, methodName, arg, data);
-                }
-            }
-
-            @Override
             public int forkProcess(int uid) throws RemoteException {
                 try {
                     return Runtime.getRuntime().exec(starterPath+" "+dexPath+" "+packageName+" "+uid).waitFor();
@@ -207,13 +209,13 @@ public class Runner {
                 }
                 provider=holder.provider;
             }
+
         }catch (Exception e){
             Log.w(TAG,e.toString());
             System.exit(ERR_GET_PROVIDER);
         }
-
         try{
-            Bundle res=executor.callContentProvider(
+            Bundle res=callContentProvider(
                     provider.asBinder(),
                     "android",
                     authority,
