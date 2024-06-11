@@ -91,7 +91,7 @@ public class Runner {
                     i++;
                 }
                 if (i == 5){
-                    Log.w(TAG,"wait timeout");
+                    Log.e(TAG,"wait timeout");
                     System.exit(ERR_WAIT_TIMEOUT);
                 }
             }
@@ -149,11 +149,9 @@ public class Runner {
                 if(src==null){
                     throw new RemoteException("Origin binder could not be null");
                 }
-                Log.d(TAG,"createBinder");
                 return new Binder() {
                     @Override
                     public boolean onTransact(int code,Parcel data, Parcel reply, int flags) throws RemoteException {
-                        Log.d(TAG,"call:"+code);
                         return src.transact(code, data, reply, flags);
                     }
                 };
@@ -211,7 +209,7 @@ public class Runner {
             }
 
         }catch (Exception e){
-            Log.w(TAG,e.toString());
+            Log.e(TAG,e.toString());
             System.exit(ERR_GET_PROVIDER);
         }
         try{
@@ -224,7 +222,7 @@ public class Runner {
                     bundle
             );
         }catch (Exception e){
-            Log.w(TAG,e);
+            Log.e(TAG,e.toString());
             System.exit(ERR_CALL_TIMEOUT);
         }
 
