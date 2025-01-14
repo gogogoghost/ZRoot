@@ -23,8 +23,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val textView = findViewById<TextView>(R.id.text)
 
+        val app=(application as App)
+
         thread {
-            val zRoot= (application as App).zRoot ?: return@thread
+            val zRoot=app.zRoot
+
+            if(zRoot==null){
+                runOnUiThread{
+                    textView.apply {
+                        text = "$text\n"+(app.err?.toString()?:"unknown error")
+                    }
+                }
+                return@thread
+            }
 
             runOnUiThread{
                 textView.apply {

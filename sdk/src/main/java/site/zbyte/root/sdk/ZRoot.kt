@@ -40,7 +40,8 @@ class ZRoot(private val remote: IRemote) {
      * 获取一个代理的ServiceManager中的服务binder
      */
     fun getRemoteService(name: String): IBinder {
-        return remote.obtainBinderProxy(ServiceManager.getService(name))
+        val binder= ServiceManager.getService(name) ?: throw Exception("No such service")
+        return remote.obtainBinderProxy(binder)
     }
 
     /**
@@ -53,13 +54,16 @@ class ZRoot(private val remote: IRemote) {
     /**
      * 经过远程对象创建一个新进程 同步
      */
-    fun forkBlocked(context: Context, uid:Int,timeout:Long):ZRoot?{
+    fun forkBlocked(context: Context, uid:Int,timeout:Long):ZRoot{
         if(remote.uid!=0){
             throw Exception("Only uid 0 process could fork")
         }
         val starter=Starter(context)
         return starter.startBlocked(timeout){
-            remote.forkProcess(uid)==0
+            val res=remote.forkProcess(uid)
+            if(res!=0){
+                throw Exception("Bad exit code: $res")
+            }
         }
     }
 }

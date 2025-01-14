@@ -73,90 +73,49 @@ class Starter(private val context: Context,private val startupUid:Int=0){
     /**
      * 启动runner进程
      */
-    private fun startProcess(): Boolean {
-        try {
-            //此处无权限可能会抛出异常
-            val process = Runtime.getRuntime().exec("su")
+    private fun startProcess() {
+        //此处无权限可能会抛出异常
+        val process = Runtime.getRuntime().exec("su")
 
-            val dir = "/data/local/tmp/${context.packageName}.root-driver"
+        val dir = "/data/local/tmp/${context.packageName}.root-driver"
 
-            val dexTmpPath = context.cacheDir!!.absolutePath + "/runner.tmp"
-            val dexRealPath = "${dir}/runner.dex"
+        val dexTmpPath = context.cacheDir!!.absolutePath + "/runner.tmp"
+        val dexRealPath = "${dir}/runner.dex"
 
-            val starterTmpPath = context.cacheDir!!.absolutePath + "/starter.tmp"
-            val starterRealPath = "${dir}/starter"
+        val starterTmpPath = context.cacheDir!!.absolutePath + "/starter.tmp"
+        val starterRealPath = "${dir}/starter"
 
 
-            writeDex(dexTmpPath)
-            writeStarter(starterTmpPath)
+        writeDex(dexTmpPath)
+        writeStarter(starterTmpPath)
 
-            val output = OutputStreamWriter(process.outputStream)
-            //重命名
-            output.write("rm -rf $dir\n")
-            output.write("mkdir ${dir}\n")
-            output.write("mv $dexTmpPath $dexRealPath\n")
-            output.write("mv $starterTmpPath ${starterRealPath}\n")
-            output.write("chown -R shell:shell ${dir}\n")
-            output.write("chmod +x ${starterRealPath}\n")
-            output.write(
-                "$starterRealPath " +
-                        "$dexRealPath " +
-                        "${context.packageName} "+
-                        startupUid+
-                        "\n"
-            )
-            output.write("exit\n");
-            output.flush()
-            val res=process.waitFor()
-            if(res!=0)
-                throw Exception("Bad exit code:$res")
-            return true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
-        }
+        val output = OutputStreamWriter(process.outputStream)
+        //重命名
+        output.write("rm -rf $dir\n")
+        output.write("mkdir ${dir}\n")
+        output.write("mv $dexTmpPath $dexRealPath\n")
+        output.write("mv $starterTmpPath ${starterRealPath}\n")
+        output.write("chown -R shell:shell ${dir}\n")
+        output.write("chmod +x ${starterRealPath}\n")
+        output.write(
+            "$starterRealPath " +
+                    "$dexRealPath " +
+                    "${context.packageName} "+
+                    startupUid+
+                    "\n"
+        )
+        output.write("exit\n");
+        output.flush()
+        val res=process.waitFor()
+        if(res!=0)
+            throw Exception("Bad exit code: $res")
     }
-
-    /**
-     * 异步start
-     */
-//    @Synchronized
-//    fun start(timeout: Long, callback: (ZRoot?) -> Unit,customStarter:((()->Boolean)?)=null) {
-//        var obj:ZRoot?=null
-//        startReceiver{
-//            obj= ZRoot(it)
-//            synchronized(lock) {
-//                lock.notify()
-//            }
-//        }
-//        if (!(if(customStarter!=null){
-//                customStarter()
-//            }else{
-//                startProcess()
-//            })){
-//            if (!startProcess()) {
-//                stopReceiver()
-//                callback.invoke(null)
-//                return
-//            }
-//        }
-//
-//        //开启等待超时线程
-//        Thread {
-//            synchronized(lock) {
-//                lock.wait(timeout)
-//            }
-//            stopReceiver()
-//            //没被打断 超时了
-//            callback.invoke(obj)
-//        }.start()
-//    }
 
     /**
      * 同步start
      */
     @Synchronized
-    fun startBlocked(timeout: Long,customStarter:(()->Boolean)?=null): ZRoot? {
+    fun startBlocked(timeout: Long,customStarter:(()->Unit)?=null): ZRoot {
         var obj:ZRoot?=null
         startReceiver{
             obj= ZRoot(it)
@@ -164,19 +123,20 @@ class Starter(private val context: Context,private val startupUid:Int=0){
                 lock.notify()
             }
         }
-        if (!(if(customStarter!=null){
-            customStarter()
-        }else{
-            startProcess()
-        })) {
+        try{
+            if(customStarter!=null){
+                customStarter()
+            }else{
+                startProcess()
+            }
+            synchronized(lock) {
+                lock.wait(timeout)
+            }
+        }catch (e:Exception){
+            throw e
+        }finally {
             stopReceiver()
-            return null
         }
-        //等待
-        synchronized(lock) {
-            lock.wait(timeout)
-        }
-        stopReceiver()
-        return obj
+        return obj?:throw Exception("timeout")
     }
 }

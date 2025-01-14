@@ -10,10 +10,16 @@ import site.zbyte.root.sdk.ZRoot
 class App:Application() {
 
     var zRoot:ZRoot?=null
+    var err:Throwable?=null
+
     override fun onCreate() {
         super.onCreate()
 
-        zRoot=Starter(this,0).startBlocked(5000)
+        try{
+            zRoot=Starter(this,0).startBlocked(5000)
+        }catch (e:Exception){
+            err=e
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             HiddenApiBypass.addHiddenApiExemptions("");

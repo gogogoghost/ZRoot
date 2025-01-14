@@ -175,7 +175,7 @@ public class Runner {
                 try {
                     return Runtime.getRuntime().exec(starterPath+" "+dexPath+" "+packageName+" "+uid).waitFor();
                 } catch (Exception e) {
-                    Log.e(TAG,"start error"+e);
+                    Log.e(TAG,"start error: "+e);
                     throw new RemoteException(e.toString());
                 }
             }
