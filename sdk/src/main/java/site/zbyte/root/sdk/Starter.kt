@@ -67,7 +67,7 @@ class Starter(private val context: Context,private val startupUid:Int=0){
         }
         apk.close()
         if(!found)
-            throw Exception("No support starter for current device")
+            throw NoSupportedAbiException()
     }
 
     /**
@@ -108,7 +108,7 @@ class Starter(private val context: Context,private val startupUid:Int=0){
         output.flush()
         val res=process.waitFor()
         if(res!=0)
-            throw Exception("Bad exit code: $res")
+            throw BadProcessExitException(res)
     }
 
     /**
@@ -133,10 +133,10 @@ class Starter(private val context: Context,private val startupUid:Int=0){
                 lock.wait(timeout)
             }
         }catch (e:Exception){
-            throw e
+            throw StartProcessException(e)
         }finally {
             stopReceiver()
         }
-        return obj?:throw Exception("timeout")
+        return obj?:throw TimeoutException()
     }
 }

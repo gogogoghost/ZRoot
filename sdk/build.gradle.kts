@@ -27,14 +27,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     sourceSets {
-        getByName("main").assets.srcDirs(buildDir.path+"/assets")
+        getByName("main").assets.srcDirs(layout.buildDirectory.dir("assets"))
     }
     ndkVersion = "25.0.8775105"
 
@@ -84,28 +84,28 @@ tasks.register<Exec>("compileRunner"){
     val outDir=rootDir.path + "/runner/build/libs/"
 
     executable(d8File)
-    args("--release","--output",outDir,srcFile)
+    args("--no-desugaring","--release","--output",outDir,srcFile)
 }
 
 tasks.register<Copy>("copyRunner") {
     dependsOn("compileRunner")
     doFirst {
-        File(buildDir.path + "/assets").mkdirs()
+        layout.buildDirectory.dir("assets").get().asFile.mkdirs()
     }
     from(rootDir.path + "/runner/build/libs/classes.dex")
-    into(buildDir.path+"/assets/")
+    into(layout.buildDirectory.dir("assets"))
     rename("classes.dex","runner.dex")
 }
 
-tasks.configureEach {
-    if (name == "generateDebugAssets" || name == "generateReleaseAssets") {
-        dependsOn("copyRunner")
+tasks.forEach {task->
+    if (task.name == "generateDebugAssets" || task.name == "generateReleaseAssets"||task.name=="generateReleaseLintVitalModel") {
+        task.dependsOn("copyRunner")
     }
 }
 
 tasks.register<Copy>("copyAIDL2runner") {
     dependsOn(":sdk:compileReleaseAidl")
-    from(buildDir.path + "/generated/aidl_source_output_dir/release/out/")
+    from(layout.buildDirectory.dir("/generated/aidl_source_output_dir/release/out/"))
     into(rootDir.path + "/runner/src/main/java/")
 }
 

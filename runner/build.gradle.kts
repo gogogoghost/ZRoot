@@ -22,8 +22,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     namespace = "site.zbyte.root.runner"
 }
@@ -34,7 +34,7 @@ dependencies {
 
 
 tasks.register<Delete>("removeLibs") {
-    delete(buildDir.path + "/libs")
+    delete(layout.buildDirectory.dir("/libs"))
 }
 
 tasks.register<Jar>("makeJar") {
@@ -45,4 +45,8 @@ tasks.register<Jar>("makeJar") {
     exclude("**/*/BuildConfig.class")
     archiveFileName = "runner.jar"
 //    archiveName = "runner.jar"
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:deprecation")
 }

@@ -18,13 +18,11 @@ import android.os.ServiceManager;
 import android.util.Log;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 
 import site.zbyte.root.sdk.IRemote;
 
 
-public class Runner {
+public class Runner extends Thread {
 
     private static final String TAG = "rd_runner";
 
@@ -48,7 +46,7 @@ public class Runner {
     /**
      * 休眠
      */
-    private static void sleep(long time) {
+    private static void delay(long time) {
         try {
             Thread.sleep(time);
         } catch (InterruptedException e) {
@@ -81,21 +79,17 @@ public class Runner {
     /**
      * 检查启动成功与否
      */
-    private static void checkStarted() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int i = 0;
-                while (i < 5 && clientWatcher == null) {
-                    sleep(1000);
-                    i++;
-                }
-                if (i == 5){
-                    Log.e(TAG,"wait timeout");
-                    System.exit(ERR_WAIT_TIMEOUT);
-                }
-            }
-        }).start();
+    @Override
+    public void run() {
+        int i = 0;
+        while (i < 5 && clientWatcher == null) {
+            delay(1000);
+            i++;
+        }
+        if (i == 5){
+            Log.e(TAG,"wait timeout");
+            System.exit(ERR_WAIT_TIMEOUT);
+        }
     }
 
     private void run(String[] args) throws Exception {
@@ -106,7 +100,7 @@ public class Runner {
         String dexPath = args[1];
         String packageName = args[2];
 
-        Looper.prepareMainLooper();
+        Looper mainLooper = Looper.getMainLooper();
 
         IActivityManager mAm;
         IBinder activityRaw = getService("activity");
@@ -123,7 +117,7 @@ public class Runner {
         //创建类
         Log.i(TAG,"create worker:"+Config.RemoteClass);
         final IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
-                (IBinder) Class.forName(Config.RemoteClass).newInstance();
+                (IBinder) Class.forName(Config.RemoteClass).getConstructors()[0].newInstance();
 
         IRemote executor = new IRemote.Stub() {
 
@@ -226,8 +220,8 @@ public class Runner {
             System.exit(ERR_CALL_TIMEOUT);
         }
 
-        checkStarted();
-        Looper.loop();
+        this.start();
+        mainLooper.loop();
     }
 
     public static void main(String[] args) throws Exception {

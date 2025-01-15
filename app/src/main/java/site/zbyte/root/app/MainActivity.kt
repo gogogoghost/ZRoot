@@ -131,15 +131,24 @@ class MainActivity : AppCompatActivity() {
                 IActivityManager.Stub.asInterface(proxyBinder)
             else
                 ActivityManagerNative.asInterface(proxyBinder)
+            print(mAm2)
 
             /**
              * create a shell process
              */
             if(zRoot.getUid()==0){
-                val shellZRoot=zRoot.forkBlocked(this,2000,5000)?:return@thread
-                runOnUiThread{
-                    textView.apply {
-                        text = "$text\n"+"Message from remote: ${shellZRoot.getUid()}"
+                try{
+                    val shellZRoot=zRoot.forkBlocked(this,2000,5000)
+                    runOnUiThread{
+                        textView.apply {
+                            text = "$text\n"+"Message from remote: ${shellZRoot.getUid()}"
+                        }
+                    }
+                }catch (e:Exception){
+                    runOnUiThread{
+                        textView.apply {
+                            text = "$text\n"+(e.toString())
+                        }
                     }
                 }
             }
