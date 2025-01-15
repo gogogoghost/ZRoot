@@ -47,12 +47,6 @@ android {
     buildFeatures {
         aidl = true
     }
-//    applicationVariants.all { variant ->
-//        variant.outputs.all {
-//            outputFile.name = "root-driver" + "-${buildType.name}" + ".aar"
-//        }
-//        false
-//    }
 }
 
 dependencies {
@@ -77,7 +71,10 @@ val sdkDir = if(localProperties.exists()){
 
 val buildToolVersion = android.buildToolsVersion
 
-tasks.register<Exec>("compileRunner"){
+val compileRunner=tasks.register<Exec>("compileRunner"){
+    inputs.file(File(rootDir,"runner/build/libs/runner.jar"))
+    outputs.file(File(rootDir,"runner/build/libs/classes.dex"))
+
     dependsOn(":runner:makeJar")
     val d8File=sdkDir + "/build-tools/" + buildToolVersion + "/d8" + (if (isWindows)".bat" else "")
     val srcFile = rootDir.path + "/runner/build/libs/runner.jar"
@@ -87,8 +84,11 @@ tasks.register<Exec>("compileRunner"){
     args("--no-desugaring","--release","--output",outDir,srcFile)
 }
 
-tasks.register<Copy>("copyRunner") {
-    dependsOn("compileRunner")
+val copyRunner=tasks.register<Copy>("copyRunner") {
+    inputs.file(File(rootDir,"runner/build/libs/classes.dex"))
+    outputs.file(layout.buildDirectory.file("assets/runner.dex"))
+
+    dependsOn(compileRunner)
     doFirst {
         layout.buildDirectory.dir("assets").get().asFile.mkdirs()
     }
@@ -97,11 +97,7 @@ tasks.register<Copy>("copyRunner") {
     rename("classes.dex","runner.dex")
 }
 
-tasks.forEach {task->
-    if (task.name == "generateDebugAssets" || task.name == "generateReleaseAssets"||task.name=="generateReleaseLintVitalModel") {
-        task.dependsOn("copyRunner")
-    }
-}
+
 
 tasks.register<Copy>("copyAIDL2runner") {
     dependsOn(":sdk:compileReleaseAidl")
@@ -111,6 +107,22 @@ tasks.register<Copy>("copyAIDL2runner") {
 
 
 afterEvaluate {
+    tasks.named("generateDebugAssets"){
+        dependsOn(copyRunner)
+    }
+    tasks.named("generateReleaseAssets"){
+        dependsOn(copyRunner)
+    }
+    // I don't know why should I add these
+    tasks.named("lintVitalAnalyzeRelease"){
+        dependsOn(copyRunner)
+    }
+    tasks.named("generateReleaseLintVitalModel"){
+        dependsOn(copyRunner)
+    }
+    tasks.named("generateReleaseLintModel"){
+        dependsOn(copyRunner)
+    }
     publishing {
         publications {
             create<MavenPublication>("release"){

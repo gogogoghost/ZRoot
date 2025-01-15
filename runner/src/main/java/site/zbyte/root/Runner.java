@@ -22,11 +22,11 @@ import java.lang.reflect.Field;
 import site.zbyte.root.sdk.IRemote;
 
 
-public class Runner extends Thread {
+public class Runner extends Thread{
+
+    public static IBinder clientWatcher = null;
 
     private static final String TAG = "rd_runner";
-
-    private static IBinder clientWatcher = null;
 
     private static final int ERR_UNKNOWN = -10;
     private static final int ERR_WAIT_TIMEOUT = -1;
@@ -85,9 +85,10 @@ public class Runner extends Thread {
         while (i < 5 && clientWatcher == null) {
             delay(1000);
             i++;
+
         }
-        if (i == 5){
-            Log.e(TAG,"wait timeout");
+        if (i == 5) {
+            Log.e(TAG, "wait timeout");
             System.exit(ERR_WAIT_TIMEOUT);
         }
     }
@@ -100,7 +101,7 @@ public class Runner extends Thread {
         String dexPath = args[1];
         String packageName = args[2];
 
-        Looper mainLooper = Looper.getMainLooper();
+        Looper.prepare();
 
         IActivityManager mAm;
         IBinder activityRaw = getService("activity");
@@ -109,17 +110,17 @@ public class Runner extends Thread {
         } else {
             mAm = ActivityManagerNative.asInterface(activityRaw);
         }
-        if(mAm==null){
+        if (mAm == null) {
             System.exit(ERR_GET_AMS);
         }
 //        Log.i(TAG,"args:"+starterPath+" "+dexPath+" "+packageName+" "+Process.myUid());
 
         //创建类
-        Log.i(TAG,"create worker:"+Config.RemoteClass);
+        Log.i(TAG, "create worker:" + Config.RemoteClass);
         final IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
                 (IBinder) Class.forName(Config.RemoteClass).getConstructors()[0].newInstance();
 
-        IRemote executor = new IRemote.Stub() {
+        final IRemote executor = new IRemote.Stub() {
 
             @Override
             public void registerWatcher(IBinder binder) throws RemoteException {
@@ -140,12 +141,12 @@ public class Runner extends Thread {
 
             @Override
             public IBinder obtainBinderProxy(IBinder src) throws RemoteException {
-                if(src==null){
+                if (src == null) {
                     throw new RemoteException("Origin binder could not be null");
                 }
                 return new Binder() {
                     @Override
-                    public boolean onTransact(int code,Parcel data, Parcel reply, int flags) throws RemoteException {
+                    public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
                         return src.transact(code, data, reply, flags);
                     }
                 };
@@ -167,9 +168,9 @@ public class Runner extends Thread {
             @Override
             public int forkProcess(int uid) throws RemoteException {
                 try {
-                    return Runtime.getRuntime().exec(starterPath+" "+dexPath+" "+packageName+" "+uid).waitFor();
+                    return Runtime.getRuntime().exec(starterPath + " " + dexPath + " " + packageName + " " + uid).waitFor();
                 } catch (Exception e) {
-                    Log.e(TAG,"start error: "+e);
+                    Log.e(TAG, "start error: " + e);
                     throw new RemoteException(e.toString());
                 }
             }
@@ -184,30 +185,29 @@ public class Runner extends Thread {
         bundle.putBinder("runner", executor.asBinder());
 //        bundle.putBinder("caller", null);
 
-        String authority=packageName+".zroot";
-        IContentProvider provider=null;
-        try{
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
-                ContentProviderHolder holder=mAm.getContentProviderExternal(authority, 0, null, null);
-                if(holder==null){
+        String authority = packageName + ".zroot";
+        IContentProvider provider = null;
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                ContentProviderHolder holder = mAm.getContentProviderExternal(authority, 0, null, null);
+                if (holder == null) {
                     throw new Exception("cannot get provider");
                 }
-                provider=holder.provider;
-            }
-            else{
-                IActivityManager.ContentProviderHolder holder =mAm.getContentProviderExternal(authority, 0, null);
-                if(holder==null){
+                provider = holder.provider;
+            } else {
+                IActivityManager.ContentProviderHolder holder = mAm.getContentProviderExternal(authority, 0, null);
+                if (holder == null) {
                     throw new Exception("cannot get provider");
                 }
-                provider=holder.provider;
+                provider = holder.provider;
             }
 
-        }catch (Exception e){
-            Log.e(TAG,e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
             System.exit(ERR_GET_PROVIDER);
         }
-        try{
-            Bundle res=callContentProvider(
+        try {
+            Bundle res = callContentProvider(
                     provider.asBinder(),
                     "android",
                     authority,
@@ -215,14 +215,15 @@ public class Runner extends Thread {
                     null,
                     bundle
             );
-        }catch (Exception e){
-            Log.e(TAG,e.toString());
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
             System.exit(ERR_CALL_TIMEOUT);
         }
 
         this.start();
-        mainLooper.loop();
+        Looper.loop();
     }
+
 
     public static void main(String[] args) throws Exception {
         new Runner().run(args);
