@@ -30,8 +30,9 @@ int main(int argc,char* argv[]){
     se::setfilecon(dexPath, "u:object_r:shell_data_file:s0");
 
     if(argc==4){
-        int targetUid=atoi(argv[3]);
-        int currentUid=getuid();
+        char* endStr;
+        uint_t targetUid=strtol(argv[3],&endStr,10);
+        uid_t currentUid=getuid();
         if(targetUid!=currentUid){
             //need set uid
             if(currentUid!=0){
@@ -59,23 +60,29 @@ int main(int argc,char* argv[]){
     pid_t pid=fork();
     if(pid==0){
         //child
-        char class_path[128]={0};
-        sprintf(class_path,"-Djava.class.path=%s",dexPath);
+        char path[]="/system/bin/app_process";
+        char workPath[]="/system/bin";
+        char className[]="site.zbyte.root.Runner";
 
-        char nice_name[64]={0};
-        sprintf(nice_name, "--nice-name=%s", PROCESS_NAME);
+        char classPath[128]={0};
+        sprintf(classPath,"-Djava.class.path=%s",dexPath);
 
-        char *appProcessArgs[] = {
-        	const_cast<char *>("/system/bin/app_process"),
-        	class_path,
-        	const_cast<char *>("/system/bin"),
-        	nice_name,
-        	const_cast<char *>("site.zbyte.root.Runner"),
-            const_cast<char *>(starterPath),
-            const_cast<char *>(dexPath),
-        	const_cast<char *>(packageName),
+        char niceName[64]={0};
+        sprintf(niceName, "--nice-name=%s", PROCESS_NAME);
+
+        char * const appProcessArgs[] = {
+        	path,
+            classPath,
+        	workPath,
+            niceName,
+        	className,
+            //args
+            starterPath,
+            dexPath,
+        	packageName,
         	nullptr
         };
+
         printf("starting...\n");
         execvp(appProcessArgs[0], appProcessArgs);
     }else if(pid>0){
