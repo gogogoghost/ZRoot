@@ -2,15 +2,15 @@ package site.zbyte.root.sdk
 
 import android.content.Context
 import android.os.Binder
-import android.os.Build
 import java.io.File
-import java.io.FileOutputStream
 import java.io.OutputStreamWriter
-import java.util.zip.ZipFile
 
-class Starter(private val context: Context,private val startupUid:Int=0){
+
+class Starter(private val context: Context){
 
     private val lock = Object()
+
+    private var process:Process?=null
 
     /**
      * 启动receiver
@@ -31,91 +31,31 @@ class Starter(private val context: Context,private val startupUid:Int=0){
     }
 
     /**
-     * dex写入到cache目录
-     */
-    private fun writeDex(path: String) {
-        //写入dex
-        val dex = context.assets.open("runner.dex")
-        val dexTmp = File(path)
-        dexTmp.writeBytes(dex.readBytes())
-    }
-
-    /**
-     * starter写入到cache目录
-     */
-    private fun writeStarter(path: String) {
-        //写入starter
-        val fos = FileOutputStream(path)
-        val apk = ZipFile(context.applicationInfo.sourceDir)
-        val entries = apk.entries()
-        var found=false
-        while (entries.hasMoreElements()) {
-            val entry = entries.nextElement() ?: break
-            if(entry.name.startsWith("lib/")){
-                for(abi in Build.SUPPORTED_ABIS){
-                    if(entry.name=="lib/$abi/libstarter.so"){
-                        apk.getInputStream(entry).copyTo(fos)
-                        fos.flush()
-                        fos.close()
-                        found=true
-                        break
-                    }
-                }
-                if(found)
-                    break
-            }
-        }
-        apk.close()
-        if(!found)
-            throw NoSupportedAbiException()
-    }
-
-    /**
      * 启动runner进程
      */
-    private fun startProcess() {
-        //此处无权限可能会抛出异常
-        val process = Runtime.getRuntime().exec("su")
-
-        val dir = "/data/local/tmp/${context.packageName}.root-driver"
-
-        val dexTmpPath = context.cacheDir!!.absolutePath + "/runner.tmp"
-        val dexRealPath = "${dir}/runner.dex"
-
-        val starterTmpPath = context.cacheDir!!.absolutePath + "/starter.tmp"
-        val starterRealPath = "${dir}/starter"
-
-
-        writeDex(dexTmpPath)
-        writeStarter(starterTmpPath)
-
-        val output = OutputStreamWriter(process.outputStream)
-        //重命名
-        output.write("rm -rf $dir\n")
-        output.write("mkdir ${dir}\n")
-        output.write("mv $dexTmpPath $dexRealPath\n")
-        output.write("mv $starterTmpPath ${starterRealPath}\n")
-        output.write("chown -R shell:shell ${dir}\n")
-        output.write("chmod +x ${starterRealPath}\n")
-        output.write(
-            "$starterRealPath " +
-                    "$dexRealPath " +
-                    "${context.packageName} "+
-                    startupUid+
-                    "\n"
-        )
-        output.write("exit\n");
+    private fun startProcess(uid:Int) {
+        val output:OutputStreamWriter
+        val depPath="/data/local/tmp/rd_${context.packageName}.dex"
+        if(process==null){
+            process=Runtime.getRuntime().exec("su")
+            output=OutputStreamWriter(process!!.outputStream)
+            val runnerDex = File(context.cacheDir, "runner.dex")
+            runnerDex.writeBytes(context.assets.open("runner.dex").readBytes())
+            output.write("cp $runnerDex $depPath\n")
+            output.write("chown 2000:2000 $depPath\n")
+        }else{
+            output=OutputStreamWriter(process!!.outputStream)
+        }
+        val cmd="(${if(uid==0) "" else "su $uid -c "}CLASSPATH=$depPath /system/bin/app_process /system/bin --nice-name=rd_runner site.zbyte.root.Runner ${context.packageName} > /dev/null 2>&1) &\n"
+        output.write(cmd)
         output.flush()
-        val res=process.waitFor()
-        if(res!=0)
-            throw BadProcessExitException(res)
     }
 
     /**
      * 同步start
      */
     @Synchronized
-    fun startBlocked(timeout: Long,customStarter:(()->Unit)?=null): ZRoot {
+    fun start(timeout: Long,uid:Int=0): ZRoot {
         var obj:ZRoot?=null
         startReceiver{
             obj= ZRoot(it)
@@ -124,11 +64,7 @@ class Starter(private val context: Context,private val startupUid:Int=0){
             }
         }
         try{
-            if(customStarter!=null){
-                customStarter()
-            }else{
-                startProcess()
-            }
+            startProcess(uid)
             synchronized(lock) {
                 lock.wait(timeout)
             }

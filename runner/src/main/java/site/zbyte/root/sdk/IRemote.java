@@ -1,5 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
+ * Using: /home/ghost/Android/Sdk/build-tools/35.0.0/aidl -p/home/ghost/Android/Sdk/platforms/android-35/framework.aidl -o/home/ghost/sec-project/ZRoot/sdk/build/generated/aidl_source_output_dir/release/out -I/home/ghost/sec-project/ZRoot/sdk/src/main/aidl -I/home/ghost/sec-project/ZRoot/sdk/src/release/aidl -d/tmp/aidl12363080075194172707.d /home/ghost/sec-project/ZRoot/sdk/src/main/aidl/site/zbyte/root/sdk/IRemote.aidl
  */
 package site.zbyte.root.sdk;
 // Declare any non-default types here with import statements
@@ -12,11 +13,6 @@ public interface IRemote extends android.os.IInterface
     @Override public void registerWatcher(android.os.IBinder binder) throws android.os.RemoteException
     {
     }
-    //获取worker
-    @Override public android.os.IBinder getWorker() throws android.os.RemoteException
-    {
-      return null;
-    }
     //将binder发到远程返回一个代理
     @Override public android.os.IBinder obtainBinderProxy(android.os.IBinder src) throws android.os.RemoteException
     {
@@ -28,10 +24,7 @@ public interface IRemote extends android.os.IInterface
       return 0;
     }
     //start new remote process
-    @Override public int forkProcess(int uid) throws android.os.RemoteException
-    {
-      return 0;
-    }
+    //    int forkProcess(int uid);
     //获取当前进程uid
     @Override public int getUid() throws android.os.RemoteException
     {
@@ -46,6 +39,7 @@ public interface IRemote extends android.os.IInterface
   public static abstract class Stub extends android.os.Binder implements site.zbyte.root.sdk.IRemote
   {
     /** Construct the stub at attach it to the interface. */
+    @SuppressWarnings("this-escape")
     public Stub()
     {
       this.attachInterface(this, DESCRIPTOR);
@@ -75,13 +69,9 @@ public interface IRemote extends android.os.IInterface
       if (code >= android.os.IBinder.FIRST_CALL_TRANSACTION && code <= android.os.IBinder.LAST_CALL_TRANSACTION) {
         data.enforceInterface(descriptor);
       }
-      switch (code)
-      {
-        case INTERFACE_TRANSACTION:
-        {
-          reply.writeString(descriptor);
-          return true;
-        }
+      if (code == INTERFACE_TRANSACTION) {
+        reply.writeString(descriptor);
+        return true;
       }
       switch (code)
       {
@@ -91,13 +81,6 @@ public interface IRemote extends android.os.IInterface
           _arg0 = data.readStrongBinder();
           this.registerWatcher(_arg0);
           reply.writeNoException();
-          break;
-        }
-        case TRANSACTION_getWorker:
-        {
-          android.os.IBinder _result = this.getWorker();
-          reply.writeNoException();
-          reply.writeStrongBinder(_result);
           break;
         }
         case TRANSACTION_obtainBinderProxy:
@@ -116,15 +99,6 @@ public interface IRemote extends android.os.IInterface
           java.lang.String _arg1;
           _arg1 = data.readString();
           int _result = this.getTransactCode(_arg0, _arg1);
-          reply.writeNoException();
-          reply.writeInt(_result);
-          break;
-        }
-        case TRANSACTION_forkProcess:
-        {
-          int _arg0;
-          _arg0 = data.readInt();
-          int _result = this.forkProcess(_arg0);
           reply.writeNoException();
           reply.writeInt(_result);
           break;
@@ -174,24 +148,6 @@ public interface IRemote extends android.os.IInterface
           _data.recycle();
         }
       }
-      //获取worker
-      @Override public android.os.IBinder getWorker() throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        android.os.IBinder _result;
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_getWorker, _data, _reply, 0);
-          _reply.readException();
-          _result = _reply.readStrongBinder();
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-        return _result;
-      }
       //将binder发到远程返回一个代理
       @Override public android.os.IBinder obtainBinderProxy(android.os.IBinder src) throws android.os.RemoteException
       {
@@ -232,24 +188,7 @@ public interface IRemote extends android.os.IInterface
         return _result;
       }
       //start new remote process
-      @Override public int forkProcess(int uid) throws android.os.RemoteException
-      {
-        android.os.Parcel _data = android.os.Parcel.obtain();
-        android.os.Parcel _reply = android.os.Parcel.obtain();
-        int _result;
-        try {
-          _data.writeInterfaceToken(DESCRIPTOR);
-          _data.writeInt(uid);
-          boolean _status = mRemote.transact(Stub.TRANSACTION_forkProcess, _data, _reply, 0);
-          _reply.readException();
-          _result = _reply.readInt();
-        }
-        finally {
-          _reply.recycle();
-          _data.recycle();
-        }
-        return _result;
-      }
+      //    int forkProcess(int uid);
       //获取当前进程uid
       @Override public int getUid() throws android.os.RemoteException
       {
@@ -270,23 +209,20 @@ public interface IRemote extends android.os.IInterface
       }
     }
     static final int TRANSACTION_registerWatcher = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
-    static final int TRANSACTION_getWorker = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
-    static final int TRANSACTION_obtainBinderProxy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
-    static final int TRANSACTION_getTransactCode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
-    static final int TRANSACTION_forkProcess = (android.os.IBinder.FIRST_CALL_TRANSACTION + 4);
-    static final int TRANSACTION_getUid = (android.os.IBinder.FIRST_CALL_TRANSACTION + 5);
+    static final int TRANSACTION_obtainBinderProxy = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+    static final int TRANSACTION_getTransactCode = (android.os.IBinder.FIRST_CALL_TRANSACTION + 2);
+    static final int TRANSACTION_getUid = (android.os.IBinder.FIRST_CALL_TRANSACTION + 3);
   }
+  /** @hide */
   public static final java.lang.String DESCRIPTOR = "site.zbyte.root.sdk.IRemote";
   //注册一个watcher 用来跟踪app是否死亡 然后runner退出
   public void registerWatcher(android.os.IBinder binder) throws android.os.RemoteException;
-  //获取worker
-  public android.os.IBinder getWorker() throws android.os.RemoteException;
   //将binder发到远程返回一个代理
   public android.os.IBinder obtainBinderProxy(android.os.IBinder src) throws android.os.RemoteException;
   //获取transact code
   public int getTransactCode(java.lang.String clsName, java.lang.String fieldName) throws android.os.RemoteException;
   //start new remote process
-  public int forkProcess(int uid) throws android.os.RemoteException;
+  //    int forkProcess(int uid);
   //获取当前进程uid
   public int getUid() throws android.os.RemoteException;
 }

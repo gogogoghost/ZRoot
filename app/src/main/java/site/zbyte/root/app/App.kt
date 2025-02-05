@@ -9,6 +9,7 @@ import site.zbyte.root.sdk.ZRoot
 
 class App:Application() {
 
+    val zRootStarter=Starter(this)
     var zRoot:ZRoot?=null
     var err:Throwable?=null
 
@@ -16,7 +17,7 @@ class App:Application() {
         super.onCreate()
 
         try{
-            zRoot=Starter(this,0).startBlocked(5000)
+            zRoot=zRootStarter.start(5000)
         }catch (e:Exception){
             err=e
         }

@@ -94,12 +94,10 @@ public class Runner extends Thread{
     }
 
     private void run(String[] args) throws Exception {
-        if (args.length != 3) {
-            throw new Exception("Bad args");
+        if (args.length != 1) {
+            throw new Exception("Bad args: "+args.length);
         }
-        String starterPath = args[0];
-        String dexPath = args[1];
-        String packageName = args[2];
+        String packageName = args[0];
 
         Looper.prepare();
 
@@ -116,9 +114,9 @@ public class Runner extends Thread{
 //        Log.i(TAG,"args:"+starterPath+" "+dexPath+" "+packageName+" "+Process.myUid());
 
         //创建类
-        Log.i(TAG, "create worker:" + Config.RemoteClass);
-        final IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
-                (IBinder) Class.forName(Config.RemoteClass).getConstructors()[0].newInstance();
+//        Log.i(TAG, "create worker:" + Config.RemoteClass);
+//        final IBinder finalWorker = Config.RemoteClass.isEmpty() ? null :
+//                (IBinder) Class.forName(Config.RemoteClass).getConstructors()[0].newInstance();
 
         final IRemote executor = new IRemote.Stub() {
 
@@ -134,10 +132,10 @@ public class Runner extends Thread{
                 }, 0);
             }
 
-            @Override
-            public IBinder getWorker() throws RemoteException {
-                return finalWorker;
-            }
+//            @Override
+//            public IBinder getWorker() throws RemoteException {
+//                return finalWorker;
+//            }
 
             @Override
             public IBinder obtainBinderProxy(IBinder src) throws RemoteException {
@@ -162,16 +160,6 @@ public class Runner extends Thread{
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                     return -1;
-                }
-            }
-
-            @Override
-            public int forkProcess(int uid) throws RemoteException {
-                try {
-                    return Runtime.getRuntime().exec(starterPath + " " + dexPath + " " + packageName + " " + uid).waitFor();
-                } catch (Exception e) {
-                    Log.e(TAG, "start error: " + e);
-                    throw new RemoteException(e.toString());
                 }
             }
 

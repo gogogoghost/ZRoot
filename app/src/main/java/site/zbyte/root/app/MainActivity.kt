@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.*
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import site.zbyte.root.sdk.Starter
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -138,7 +139,7 @@ class MainActivity : AppCompatActivity() {
              */
             if(zRoot.getUid()==0){
                 try{
-                    val shellZRoot=zRoot.forkBlocked(this,2000,5000)
+                    val shellZRoot=app.zRootStarter.start(5000,2000)
                     runOnUiThread{
                         textView.apply {
                             text = "$text\n"+"Message from remote: ${shellZRoot.getUid()}"

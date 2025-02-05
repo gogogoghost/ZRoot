@@ -36,13 +36,13 @@ android {
     sourceSets {
         getByName("main").assets.srcDirs(layout.buildDirectory.dir("assets"))
     }
-    ndkVersion = "25.0.8775105"
+//    ndkVersion = "25.0.8775105"
 
-    externalNativeBuild {
-        cmake {
-            path("CMakeLists.txt")
-        }
-    }
+//    externalNativeBuild {
+//        cmake {
+//            path("CMakeLists.txt")
+//        }
+//    }
     namespace = "site.zbyte.root.sdk"
     buildFeatures {
         aidl = true
@@ -85,7 +85,7 @@ val compileRunner=tasks.register<Exec>("compileRunner"){
 }
 
 val copyRunner=tasks.register<Copy>("copyRunner") {
-    inputs.file(File(rootDir,"runner/build/libs/classes.dex"))
+    inputs.file(rootDir.path + "/runner/build/libs/classes.dex")
     outputs.file(layout.buildDirectory.file("assets/runner.dex"))
 
     dependsOn(compileRunner)
@@ -101,7 +101,7 @@ val copyRunner=tasks.register<Copy>("copyRunner") {
 
 tasks.register<Copy>("copyAIDL2runner") {
     dependsOn(":sdk:compileReleaseAidl")
-    from(layout.buildDirectory.dir("/generated/aidl_source_output_dir/release/out/"))
+    from(layout.buildDirectory.asFile.get().absolutePath+"/generated/aidl_source_output_dir/release/out/")
     into(rootDir.path + "/runner/src/main/java/")
 }
 

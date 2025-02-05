@@ -21,10 +21,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     namespace = "site.zbyte.root.runner"
 }
 
@@ -47,7 +43,6 @@ tasks.register<Jar>("makeJar") {
     )
     exclude("**/*/BuildConfig.class")
     archiveFileName = "runner.jar"
-//    archiveName = "runner.jar"
 }
 
 tasks.withType<JavaCompile> {
